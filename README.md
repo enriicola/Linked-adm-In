@@ -37,7 +37,7 @@ The following conceptual schema captures key entities and their relationships:
         Benefit: Represents benefits offered for a job.
 
     Relationships:
-        BELONGS_TO: Links a job to an industry.
+        BELONGS_TO: Links a job to an company.
         REQUIRES: Links a job to the skills it demands.
         OFFERS: Links a job to the benefits it provides.
         OPERATES_IN: Links a company to the industries it operates in.
