@@ -33,7 +33,7 @@ The following conceptual schema captures key entities and their relationships:
         Job: Represents a job posting.
         Company: Represents a company.
         Industry: Represents an industry domain.
-        Skill: Represents a skill associated with a job.
+        Skill: Represents skills associated with a job.
         Benefit: Represents benefits offered for a job.
 
     Relationships:
@@ -41,7 +41,6 @@ The following conceptual schema captures key entities and their relationships:
         REQUIRES: Links a job to the skills it demands.
         OFFERS: Links a job to the benefits it provides.
         OPERATES_IN: Links a company to the industries it operates in.
-        USES: Links a company to the skills it specializes in.
 
 Workload: Relevant and Frequent Operations
 
