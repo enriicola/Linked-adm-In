@@ -11,25 +11,25 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 
 ## The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
 
-Read/Write Intensity
-
-Read/Write Intensity
-The application is predominantly read-intensive, as it emphasizes retrieving data; such as querying the skills required for a job, the benefits offered, or the industries associated with a company.
-Write operations occur moderately, primarily when new jobs, companies, skills, or benefits are added to the system. These updates may include inserting related attributes like market values, skill scores, or job expiration dates.
-
-Batch Processing
-Batch imports can be essential only during initialization or when large updates to the dataset occur, such as integrating new company records, updated job postings, or expanded benefit types.
-Efficient batch processing should ensure data consistency, especially when dealing with related entities (e.g. associating a job with the correct company and required skills during import)
-
-Consistency and Availability
-Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries.
-For core operations (e.g., adding new jobs or companies), ensuring consistency is more critical, as incomplete or incorrect relationships (e.g. a job missing its associated company) could affect query accuracy.
-However, having high availability clearly is the most important goal to reach, particularly for supporting real-time data retrieval and queries.
-
-Performance
-The system should be optimized for retrieving and filtering data (also across entities), such as:
-Searching for jobs based on attributes like type, location, or expiration date.
-Filtering companies by criteria like market value, location, or associated industries.
+    Read/Write Intensity
+    
+    Read/Write Intensity
+    The application is predominantly read-intensive, as it emphasizes retrieving data; such as querying the skills required for a job, the benefits offered, or the industries associated with a company.
+    Write operations occur moderately, primarily when new jobs, companies, skills, or benefits are added to the system. These updates may include inserting related attributes like market values, skill scores, or job expiration dates.
+    
+    Batch Processing
+    Batch imports can be essential only during initialization or when large updates to the dataset occur, such as integrating new company records, updated job postings, or expanded benefit types.
+    Efficient batch processing should ensure data consistency, especially when dealing with related entities (e.g. associating a job with the correct company and required skills during import)
+    
+    Consistency and Availability
+    Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries.
+    For core operations (e.g., adding new jobs or companies), ensuring consistency is more critical, as incomplete or incorrect relationships (e.g. a job missing its associated company) could affect query accuracy.
+    However, having high availability clearly is the most important goal to reach, particularly for supporting real-time data retrieval and queries.
+    
+    Performance
+    The system should be optimized for retrieving and filtering data (also across entities), such as:
+    Searching for jobs based on attributes like type, location, or expiration date.
+    Filtering companies by criteria like market value, location, or associated industries.
 
 Conceptual Schema
 
