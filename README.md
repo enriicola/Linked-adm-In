@@ -9,7 +9,7 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 
 Nature of the Proposed Application
 
-The proposed application is a job and industry relationship analysis tool tailored for use with a Neo4j graph database. Its features and requirements include:
+The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
 
     Read/Write Intensity:
         The application is read-intensive, as it focuses on querying relationships (e.g., finding skills for a job or industries related to a company).
