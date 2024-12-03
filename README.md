@@ -30,11 +30,11 @@ Conceptual Schema
 The following conceptual schema captures key entities and their relationships:
 
     Nodes:
-        Job: Represents a job posting (for now has a title attribute)
-        Company: Represents a company (for now has a name attribute)
-        Industry: Represents an industry domain 
-        Skill: Represents skills associated with a job
-        Benefit: Represents benefits offered for a job
+        Job(Title, Expire date, Type): Represents a job posting (for now has a title attribute)
+        Company(Name, Country, City, ZipCode, MarketValue): Represents a company (for now has a name attribute)
+        IndustryDomain(Name): Represents an industry domain 
+        Skill(Name, Level, Score): Represents skills associated with a job
+        Benefit(Type (PK), Economical Value): Represents benefits offered for a job
 
     Relationships:
         BELONGS_TO: Links a job to an company (1-N: with an attribute "salary" of the association)
@@ -43,6 +43,19 @@ The following conceptual schema captures key entities and their relationships:
         OFFERS: Links a job to the benefits it provides (N-N)
         OPERATES_IN: Links a company to the industries it operates in (1-N)
 
-Workload: Relevant and Frequent Operations
-
-
+Queries:
+    
+    Query 1: Find all jobs that are Full-time and expiring within the next 30 days.
+    
+    Query 2: List companies in a specific city (e.g., "New York") with a market value greater than $1,000,000.
+    
+    Query 3: Retrieve all skills required for jobs offering benefits of a specific type (e.g., "401(k)") and having a score above 70.
+    
+    Query 4: List companies operating in a specific country (e.g., "USA") and associated with jobs that expire in more than 60 days.
+    Workload: Relevant and Frequent Operations
+    
+    Query 5: Find all jobs of a specific type (e.g., "Internship") that require skills with a level of "Beginner" and are associated with companies in a particular city (e.g., "Chicago").
+    
+    Query 6: Retrieve all jobs, along with their required skills, benefits, and associated company details, for companies in cities with a zip code starting with "10".
+    
+    Query 7: List jobs requiring skills with a level of "Expert" and associated with companies operating in a specific domain (e.g., "Technology").
