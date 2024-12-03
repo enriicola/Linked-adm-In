@@ -7,23 +7,35 @@ https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
 ### project description link
 https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 
-Nature of the Proposed Application
+# Nature of the Proposed Application
 
-The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
+## The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
 
-    Read/Write Intensity:
-        The application is read-intensive, as it focuses on querying relationships (e.g., finding skills for a job or industries related to a company).
-        It supports moderate write operations, including updates when new jobs, companies, or industries are added.
+Read/Write Intensity
 
-    Batch Processing:
-        Batch imports are necessary during initialization or major updates to integrate new datasets into the graph database.
+    The application is predominantly read-intensive, focusing on querying relationships, such as finding the required skills for a job, the benefits offered, or the industries related to a company. This aligns with the domain's need for fast and frequent data lookups.
+    Write operations are moderate, involving periodic updates when new jobs, companies, skills, or industries are added. Bulk writes may occur less frequently but require efficient batch processing mechanisms to handle larger datasets (e.g., importing new salary or employee count records).
 
-    Consistency and Availability:
-        Eventual consistency suffices for non-critical updates to nodes and relationships, given the read-heavy workload.
-        High availability is important for supporting real-time queries by users.
+Batch Processing
 
-    Performance:
-        Optimized for graph traversals like shortest path, recommendations, and neighborhood exploration.
+    Batch imports are critical during system initialization or when integrating significant updates to datasets, such as adding new companies, job listings, or benefit types.
+    These imports should ensure referential integrity between nodes and relationships (e.g., ensuring a new job listing correctly links to the company and required skills).
+    Using a pipeline or staged processing approach can optimize batch imports, allowing data verification and indexing before ingestion.
+
+Consistency and Availability
+
+    Eventual consistency is acceptable for non-critical updates (e.g., adding a new benefit to a job or updating a company's market value) as these updates do not impact the real-time querying experience.
+    However, strong consistency may be required for critical operations such as creating or updating jobs where incomplete relationships (e.g., a job without a linked company or missing skills) could lead to data inconsistencies in user-facing queries.
+    High availability is crucial to support real-time queries by users, particularly for applications requiring immediate responses, like job matching or skill recommendations.
+
+Performance
+
+    The system should be optimized for graph traversals, leveraging efficient querying techniques for:
+        Exploring neighborhoods (e.g., finding all jobs associated with a specific skill or benefit).
+        Recommendation tasks, such as identifying companies operating in similar industries or suggesting jobs requiring overlapping skillsets.
+        Pathfinding, such as tracing relationships between a job and an industry through associated companies.
+    Precomputing frequently accessed relationships (e.g., jobs requiring specific high-demand skills) or indexing key attributes (like Title, Name, or Level) can enhance query performance.
+    Query optimization should prioritize reducing redundant traversals and filtering data early in the query pipeline.
 
 Conceptual Schema
 
