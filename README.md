@@ -44,23 +44,4 @@ The following conceptual schema captures key entities and their relationships:
 
 Workload: Relevant and Frequent Operations
 
-    Find All Jobs in a Specific Industry:
-        Description: Retrieve all job postings that belong to a specified industry.
-        Query: Match jobs to industries via the BELONGS_TO relationship.
-
-    Find Skills Required for a Job:
-        Description: List all the skills associated with a specific job.
-        Query: Match jobs to skills via the REQUIRES relationship.
-
-    Identify Industries a Company Operates In:
-        Description: Find all industries a specific company is linked to.
-        Query: Match companies to industries via the OPERATES_IN relationship.
-
-    Retrieve Benefits for a Specific Job:
-        Description: List all the benefits offered for a particular job.
-        Query: Match jobs to benefits via the OFFERS relationship.
-
-    Recommend Jobs Based on Skills:
-        Description: Suggest jobs that match a given list of skills, prioritizing those that match the most skills.
-        Query: Match skills to jobs via the REQUIRES relationship and rank jobs based on skill matches.
 
