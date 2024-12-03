@@ -30,17 +30,18 @@ Conceptual Schema
 The following conceptual schema captures key entities and their relationships:
 
     Nodes:
-        Job: Represents a job posting.
-        Company: Represents a company.
-        Industry: Represents an industry domain.
-        Skill: Represents skills associated with a job.
-        Benefit: Represents benefits offered for a job.
+        Job: Represents a job posting (for now has a title attribute)
+        Company: Represents a company (for now has a name attribute)
+        Industry: Represents an industry domain 
+        Skill: Represents skills associated with a job
+        Benefit: Represents benefits offered for a job
 
     Relationships:
-        BELONGS_TO: Links a job to an company.
-        REQUIRES: Links a job to the skills it demands.
-        OFFERS: Links a job to the benefits it provides.
-        OPERATES_IN: Links a company to the industries it operates in.
+        BELONGS_TO: Links a job to an company (1-N: with an attribute "salary" of the association)
+        --> the key of Job will be the composite of title and the foreign key of company
+        REQUIRES: Links a job to the skills it demands (N-N)
+        OFFERS: Links a job to the benefits it provides (N-N)
+        OPERATES_IN: Links a company to the industries it operates in (1-N)
 
 Workload: Relevant and Frequent Operations
 
