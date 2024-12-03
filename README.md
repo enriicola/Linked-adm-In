@@ -10,8 +10,6 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 # Nature of the Proposed Application
 
 ## The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
-
-    Read/Write Intensity
     
     Read/Write Intensity
     The application is predominantly read-intensive, as it emphasizes retrieving data; such as querying the skills required for a job, the benefits offered, or the industries associated with a company.
