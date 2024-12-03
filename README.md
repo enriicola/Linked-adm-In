@@ -13,29 +13,24 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 
 Read/Write Intensity
 
-    The application is predominantly read-intensive, focusing on querying relationships, such as finding the required skills for a job, the benefits offered, or the industries related to a company. This aligns with the domain's need for fast and frequent data lookups.
-    Write operations are moderate, involving periodic updates when new jobs, companies, skills, or industries are added. Bulk writes may occur less frequently but require efficient batch processing mechanisms to handle larger datasets (e.g., importing new salary or employee count records).
+Read/Write Intensity
+The application is predominantly read-intensive, as it emphasizes retrieving data, such as querying the skills required for a job, the benefits offered, or the industries associated with a company.
+Write operations occur moderately, primarily when new jobs, companies, skills, or benefits are added to the system. These updates may include inserting related attributes like market values, skill scores, or job expiration dates.
 
 Batch Processing
-
-    Batch imports are critical during system initialization or when integrating significant updates to datasets, such as adding new companies, job listings, or benefit types.
-    These imports should ensure referential integrity between nodes and relationships (e.g., ensuring a new job listing correctly links to the company and required skills).
-    Using a pipeline or staged processing approach can optimize batch imports, allowing data verification and indexing before ingestion.
+Batch imports are essential during initialization or when large updates to the dataset occur, such as integrating new company records, updated job postings, or expanded benefit types.
+Efficient batch processing should ensure data consistency, especially when dealing with related entities (e.g., associating a job with the correct company and required skills during import).
 
 Consistency and Availability
-
-    Eventual consistency is acceptable for non-critical updates (e.g., adding a new benefit to a job or updating a company's market value) as these updates do not impact the real-time querying experience.
-    However, strong consistency may be required for critical operations such as creating or updating jobs where incomplete relationships (e.g., a job without a linked company or missing skills) could lead to data inconsistencies in user-facing queries.
-    High availability is crucial to support real-time queries by users, particularly for applications requiring immediate responses, like job matching or skill recommendations.
+Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries.
+For core operations (e.g., adding new jobs or companies), ensuring consistency is more critical, as incomplete or incorrect relationships (e.g., a job missing its associated company) could affect query accuracy.
+High availability is important, particularly for supporting real-time data retrieval and queries, such as job search results or company overviews.
 
 Performance
-
-    The system should be optimized for graph traversals, leveraging efficient querying techniques for:
-        Exploring neighborhoods (e.g., finding all jobs associated with a specific skill or benefit).
-        Recommendation tasks, such as identifying companies operating in similar industries or suggesting jobs requiring overlapping skillsets.
-        Pathfinding, such as tracing relationships between a job and an industry through associated companies.
-    Precomputing frequently accessed relationships (e.g., jobs requiring specific high-demand skills) or indexing key attributes (like Title, Name, or Level) can enhance query performance.
-    Query optimization should prioritize reducing redundant traversals and filtering data early in the query pipeline.
+The system should be optimized for retrieving and filtering data, such as:
+Searching for jobs based on attributes like type, location, or expiration date.
+Filtering companies by criteria like market value, location, or associated industries.
+Retrieving related data, such as the skills required for a job or the benefits it offers.
 
 Conceptual Schema
 
