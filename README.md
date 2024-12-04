@@ -84,7 +84,7 @@ The following conceptual schema captures key entities and their relationships:
         OFFERS: Links a job to the benefits it provides (N-N)
         OPERATES_IN: Links a company to the industries it operates in (1-N)
 
-![ER1](https://github.com/user-attachments/assets/bc6fa2b4-81d7-491f-ab8b-dd604e804d6d)
+![Er1](https://github.com/user-attachments/assets/bb3e515b-c972-4ad3-827a-d7471e4cd96a)
 
 Queries:
     
