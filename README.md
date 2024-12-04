@@ -84,6 +84,8 @@ The following conceptual schema captures key entities and their relationships:
         OFFERS: Links a job to the benefits it provides (N-N)
         OPERATES_IN: Links a company to the industries it operates in (1-N)
 
+![ER1](https://github.com/user-attachments/assets/bc6fa2b4-81d7-491f-ab8b-dd604e804d6d)
+
 Queries:
     
     Query 1: Find all jobs that are Full-time and expiring within the next 30 days.
