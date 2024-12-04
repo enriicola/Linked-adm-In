@@ -87,16 +87,23 @@ The following conceptual schema captures key entities and their relationships:
 Queries:
     
     Query 1: Find all jobs that are Full-time and expiring within the next 30 days.
+    Q1(Job, [Job(type)_!, Job(expire_date)_!], [Job_!])
     
-    Query 2: List companies in a specific city (e.g., "New York") with a market value greater than $1,000,000.
+    Query 2: List the name of companies in a specific city (e.g., "New York") with a market value greater than $1,000,000.
+    Q2(Company, [Company(city)_!, Company(mv)_!], [Company(name)_!])
     
-    Query 3: Retrieve all skills required for jobs offering benefits of a specific type (e.g., "401(k)") and having a score above 70.
-    
-    Query 4: List companies operating in a specific country (e.g., "USA") and associated with jobs that expire in more than 60 days.
+    Query 3: List name and market value of companies operating in a specific country (e.g. "USA") and associated with jobs that expire in more than 60 days.
     Workload: Relevant and Frequent Operations
+    Q3(Job, [Company(country)_L, Job(expire_date)_!], [Company(name, mv)_L])
     
-    Query 5: Find all jobs of a specific type (e.g., "Internship") that require skills with a level of "Beginner" and are associated with companies in a particular city (e.g., "Chicago").
+    Query 4: Find the title of all jobs of a specific type (e.g., "Internship") that require skills with a level of "Beginner" and are associated with companies in a particular city (e.g., "Chicago").
+    Q4(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
-    Query 6: Retrieve all jobs, along with their required skills, benefits, and associated company details, for companies in cities with a zip code starting with "10".
-    
-    Query 7: List jobs requiring skills with a level of "Expert" and associated with companies operating in a specific domain (e.g., "Technology").
+    Query 5: List type of jobs associated with companies operating in a specific domain (e.g., "Technology").
+    Q5(IndustryDomain, [IndustryDomain(Name)_!], [Job(type)_OL])
+
+    Query 6: List type jobs associated with italian companies operating in a specific domain (e.g., "Technology").
+    Q6(Company, [IndustryDomain(Name)_O, Company(country)_!], [Job(type)_L])
+
+    Query 7: Retrieve all skills required for jobs offering benefits of a specific type (e.g. "401(k)") and having a score above 70.
+    Q7(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill_!])
