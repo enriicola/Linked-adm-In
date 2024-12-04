@@ -89,21 +89,21 @@ Queries:
     Query 1: Find all jobs that are Full-time and expiring within the next 30 days.
     Q1(Job, [Job(type)_!, Job(expire_date)_!], [Job_!])
     
-    Query 2: List the name of companies in a specific city (e.g., "New York") with a market value greater than $1,000,000.
+    Query 2: List the name of companies in New York with a market value greater than $1,000,000.
     Q2(Company, [Company(city)_!, Company(mv)_!], [Company(name)_!])
     
-    Query 3: List name and market value of companies operating in a specific country (e.g. "USA") and associated with jobs that expire in more than 60 days.
+    Query 3: List name and market value of companies operating in Russia and associated with jobs that expire in more than 60 days.
     Workload: Relevant and Frequent Operations
     Q3(Job, [Company(country)_L, Job(expire_date)_!], [Company(name, mv)_L])
     
-    Query 4: List type of jobs associated with companies operating in a specific domain (e.g., "Technology").
+    Query 4: List type of jobs associated with companies operating in the Technology domain
     Q4(IndustryDomain, [IndustryDomain(Name)_!], [Job(type)_OL])
 
-    Query 5: List type jobs associated with italian companies operating in a specific domain (e.g., "Technology").
+    Query 5: List type jobs associated with italian companies operating in the Technology domain
     Q5(Company, [IndustryDomain(Name)_O, Company(country)_!], [Job(type)_L])
 
-    Query 6: Retrieve all skills required for jobs offering benefits of a specific type (e.g. "401(k)") and having a score above 70.
+    Query 6: Retrieve all skills required for jobs offering benefits of type 401(k) and having a score above 70.
     Q6(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill_!])
 
-        Query ?: Find the title of all jobs of a specific type (e.g., "Internship") that require skills with a level of "Beginner" and are associated with companies in a particular city (e.g., "Chicago").
+        Query ?: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
     Q?(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
