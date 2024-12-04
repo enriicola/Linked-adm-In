@@ -106,7 +106,7 @@ Queries:
     Query 6: Retrieve name of skills required for jobs offering benefits of type 401(k) and having a score above 70.
     Q6(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill(name)_!])
 
-        Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
+    Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
     Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
 ![Er2](https://github.com/user-attachments/assets/4224d923-892c-42ee-931e-0c9f718ac424)
