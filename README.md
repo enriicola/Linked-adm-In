@@ -97,13 +97,13 @@ Queries:
     Q3(Job, [Company(country)_L, Job(expire_date)_!], [Company(name, mv)_L])
     
     Query 4: List type of jobs associated with companies operating in the Technology domain
-    Q4(IndustryDomain, [IndustryDomain(Name)_!], [Job(type)_OL])
+    Q4(IndustryDomain, [IndustryDomain(Name)_!], [Job(type)_LO])
 
     Query 5: List type jobs associated with italian companies operating in the Technology domain
     Q5(Company, [IndustryDomain(Name)_O, Company(country)_!], [Job(type)_L])
 
-    Query 6: Retrieve all skills required for jobs offering benefits of type 401(k) and having a score above 70.
-    Q6(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill_!])
+    Query 6: Retrieve name of skills required for jobs offering benefits of type 401(k) and having a score above 70.
+    Q6(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill(name)_!])
 
-        Query ?: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
-    Q?(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
+        Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
+    Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
