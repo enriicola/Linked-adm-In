@@ -113,26 +113,26 @@ Queries:
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
 {
-    <u>title, companyName</u>, expire_date, type, country, city, marketValue,
+    <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
 }
 
 ### Company: <!-- Q2, Q5 -->
 {
-    -name-, marketValue, country, city,
+    <ins>name</ins>, marketValue, country, city,
     job_offers: [{job: {type}}],
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
 ### IndustryDomain: <!-- Q4 -->
 {
-    -name-,
+    <ins>name</ins>,
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
 }
 
 ### Skill: <!-- Q6 -->
 {
-    -name-,score,
+    <ins>name</ins>,score,
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
 
