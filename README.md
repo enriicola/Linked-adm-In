@@ -109,29 +109,28 @@ Queries:
     Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
     Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
-![Er2](https://github.com/user-attachments/assets/4224d923-892c-42ee-931e-0c9f718ac424)
+![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
 
-
-JobOffer: // Q1, Q3, Q7
+JobOffer: <!-- Q1, Q3, Q7 -->
 {
     -title, companyName-, expire_date, type, country, city, marketValue,
     requires: [{Skill: {level}}]
 }
 
-Company: // Q2,Q5
+Company: <!-- Q2, Q5 -->
 {
     -name-, marketValue, country, city,
     listed_by: [{JobOffer: {type}}],
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
-IndustryDomain: // Q4
+IndustryDomain: <!-- Q4 -->
 {
     -name-,
     listed: [{operated?hosts?: {type}}]
 }
 
-Skill: // Q6
+Skill: <!-- Q6 -->
 {
     -name-,score,
     offered: [{required: {type}}]
