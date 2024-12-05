@@ -114,24 +114,24 @@ Queries:
 JobOffer: <!-- Q1, Q3, Q7 -->
 {
     -title, companyName-, expire_date, type, country, city, marketValue,
-    requires: [{Skill: {level}}]
+    requires: [{skill: {level}}]
 }
 
 Company: <!-- Q2, Q5 -->
 {
     -name-, marketValue, country, city,
-    listed_by: [{JobOffer: {type}}],
+    job_offers: [{job: {type}}],
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
 IndustryDomain: <!-- Q4 -->
 {
     -name-,
-    listed: [{operated?hosts?: {type}}]
+    operated: [{job: {type}}] <!-- n-n doubt -->
 }
 
 Skill: <!-- Q6 -->
 {
     -name-,score,
-    offered: [{required: {type}}]
+    provides: [{benefit: {type}}] <!-- n-n doubt -->
 }
