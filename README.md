@@ -135,3 +135,5 @@ Queries:
     -name-,score,
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
+
+### Note: inspect .md to see comments
