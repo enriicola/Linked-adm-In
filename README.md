@@ -110,3 +110,29 @@ Queries:
     Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
 ![Er2](https://github.com/user-attachments/assets/4224d923-892c-42ee-931e-0c9f718ac424)
+
+
+JobOffer: // Q1, Q3, Q7
+{
+    -title, companyName-, expire_date, type, country, city, marketValue,
+    requires: [{Skill: {level}}]
+}
+
+Company: // Q2,Q5
+{
+    -name-, marketValue, country, city,
+    listed_by: [{JobOffer: {type}}],
+    industryName <!-- simple attribute because it comes from a (1,1) association -->
+}
+
+IndustryDomain: // Q4
+{
+    -name-,
+    listed: [{operated?hosts?: {type}}]
+}
+
+Skill: // Q6
+{
+    -name-,score,
+    offered: [{required: {type}}]
+}
