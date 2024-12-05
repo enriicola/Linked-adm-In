@@ -127,11 +127,11 @@ Company: <!-- Q2, Q5 -->
 IndustryDomain: <!-- Q4 -->
 {
     -name-,
-    operated: [{job: {type}}] <!-- n-n doubt -->
+    operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
 }
 
 Skill: <!-- Q6 -->
 {
     -name-,score,
-    provides: [{benefit: {type}}] <!-- n-n doubt -->
+    provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
