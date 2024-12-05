@@ -113,7 +113,7 @@ Queries:
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
 {
-    -title, companyName-, expire_date, type, country, city, marketValue,
+    <u>title, companyName</u>, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
 }
 
