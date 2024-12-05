@@ -111,26 +111,26 @@ Queries:
     
 ![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
 
-JobOffer: <!-- Q1, Q3, Q7 -->
+### JobOffer: <!-- Q1, Q3, Q7 -->
 {
     -title, companyName-, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
 }
 
-Company: <!-- Q2, Q5 -->
+### Company: <!-- Q2, Q5 -->
 {
     -name-, marketValue, country, city,
     job_offers: [{job: {type}}],
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
-IndustryDomain: <!-- Q4 -->
+### IndustryDomain: <!-- Q4 -->
 {
     -name-,
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
 }
 
-Skill: <!-- Q6 -->
+### Skill: <!-- Q6 -->
 {
     -name-,score,
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
