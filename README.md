@@ -245,3 +245,37 @@ Then, after having thought about both queries, we create a mixed non-unique inde
 ```
   ????????
 ```
+
+### Queries associated with JobOffer: Q1, Q3, Q7
+Selection attributes for Q1: {type, expire_date}
+Selection attributes for Q3: {country, expire_date}
+Selection attributes for Q7: {type, city, level}
+
+### JobOffer: <!-- Q1, Q3, Q7 -->
+{
+    <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
+    requires: [{skill: {level}}]
+}
+
+- INDEX STUFF
+```
+
+```
+- Shard collection
+```
+
+```
+- Q1:
+```
+  ????????
+```
+
+- Q3:
+```
+  ????????
+```
+
+- Q7:
+```
+  ????????
+```
