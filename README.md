@@ -46,7 +46,7 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 
 # Nature of the Proposed Application
 
-## The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
+## (1-2) The proposed application is a job and industry relationship analysis tool. Its features and requirements include:
     
     Read/Write Intensity
     The application is predominantly read-intensive, as it emphasizes retrieving data; such as querying the skills required for a job, the benefits offered, or the industries associated with a company.
@@ -66,7 +66,7 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
     Searching for jobs based on attributes like type, location, or expiration date.
     Filtering companies by criteria like market value, location, or associated industries.
 
-Conceptual Schema
+(3) Conceptual Schema
 
 The following conceptual schema captures key entities and their relationships:
 
@@ -86,7 +86,7 @@ The following conceptual schema captures key entities and their relationships:
 
 ![Er1](https://github.com/user-attachments/assets/bb3e515b-c972-4ad3-827a-d7471e4cd96a)
 
-Queries:
+(4) Queries:
     
     Query 1: Find all jobs that are Full-time and expiring within the next 30 days.
     Q1(Job, [Job(type)_!, Job(expire_date)_!], [Job_!])
@@ -110,6 +110,8 @@ Queries:
     Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
 ![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
+
+## (5) Aggregates
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
 {
@@ -137,3 +139,65 @@ Queries:
 }
 
 ### Note: inspect .md to see comments
+
+
+## (6) Design in MongoDB 
+
+### Queries associated with Skill: Q6
+Selection attributes for Q6: {score, type} <!-- benefit type -->
+
+Skill: <!-- Q6 -->
+{
+    <ins>name</ins>,score,
+    provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
+}
+
+- A non-unique index on the partition key with Partition key = {score, type}
+```
+      db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
+```
+- A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
+```
+db.skills.createIndex(
+          { score: 1, "provides.benefit.type": 1, name: 1 },
+          { unique: true }
+  );
+```
+- Shard collection
+```
+db.adminCommand({
+  shardCollection: "db.skills",
+  key: { score: 1, "provides.benefit.type": 1 }
+});
+```
+- Q6:
+```
+  db.skills.find({score: {$gt: 70}, "provides.benefit.type": "401(k)"}, {name: 1, _id: 0});
+```
+
+### Queries associated with IndustryDomain: Q4
+Selection attributes for Q4: {name} <!-- IndustryDomain name -->
+
+### IndustryDomain: <!-- Q4 -->
+{
+    <ins>name</ins>,
+    operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
+}
+
+- A unique index on the partition key, which is also the aggregate key = {name}
+```
+  db.industryDomains.createIndex({ name: 1 }, { unique: true });
+```
+
+- Shard collection
+```
+db.adminCommand({
+  shardCollection: "db.industryDomains",
+  key: { name: 1 }
+});
+```
+
+- Q4:
+```
+  ?????????????
+```
