@@ -166,7 +166,7 @@ db.skills.createIndex(
 - Shard collection
 ```
 db.adminCommand({
-  shardCollection: "db.skills",
+  shardCollection: "db.skill",
   key: { score: 1, "provides.benefit.type": 1 }
 });
 ```
@@ -192,7 +192,7 @@ Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 - Shard collection
 ```
 db.adminCommand({
-  shardCollection: "db.industryDomains",
+  shardCollection: "db.industryDomain",
   key: { name: 1 }
 });
 ```
@@ -200,4 +200,48 @@ db.adminCommand({
 - Q4:
 ```
   ?????????????
+```
+
+### Queries associated with Company: Q2, Q5
+Selection attributes for Q2: {city, mv}
+Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
+
+### Company: <!-- Q2, Q5 -->
+{
+    <ins>name</ins>, marketValue, country, city,
+    job_offers: [{job: {type}}],
+    industryName <!-- simple attribute because it comes from a (1,1) association -->
+}
+
+- Given that the intersection between selection attributes in Q2 and Q5 is empty: instead of having a single non-unique index on {city, mv, country, industryName} we choose to separetely support both queries by creating two separate non-unique indexes onto them:
+```
+    db.companies.createIndex({ city: 1, mv: 1 });
+    db.companies.createIndex({ country: 1, industryName: 1 });
+```
+Then, after having thought about both queries, we create a mixed non-unique index for sharding and to then support the uniqueness of name with a compound index:
+```
+    db.companies.createIndex({ city: 1, country: 1 });
+```
+- A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
+```
+    db.companies.createIndex(
+      { city: 1, country: 1, name: 1 },
+      { unique: true }
+    );
+```
+- Shard collection
+```
+    db.adminCommand({
+      shardCollection: "db.Company",
+      key: { city: 1, country: 1 }
+    });
+```
+- Q2:
+```
+  db.companies.find({ city: "New York", mv: { $gt: 1000000 } }, { name: 1, _id: 0 });
+```
+
+- Q5:
+```
+  ????????
 ```
