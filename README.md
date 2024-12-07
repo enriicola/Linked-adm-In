@@ -204,6 +204,7 @@ db.adminCommand({
 
 ### Queries associated with Company: Q2, Q5
 Selection attributes for Q2: {city, mv}
+
 Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
 
 ### Company: <!-- Q2, Q5 -->
@@ -248,7 +249,9 @@ Then, after having thought about both queries, we create a mixed non-unique inde
 
 ### Queries associated with JobOffer: Q1, Q3, Q7
 Selection attributes for Q1: {type, expire_date}
+
 Selection attributes for Q3: {country, expire_date}
+
 Selection attributes for Q7: {type, city, level}
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
