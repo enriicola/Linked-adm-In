@@ -260,13 +260,29 @@ Selection attributes for Q7: {type, city, level}
     requires: [{skill: {level}}]
 }
 
-- INDEX STUFF
-```
-
-```
+- We observe that type appears in both Q1 and Q7 while expire_date in both Q1 and Q3: so we have an empty intersection but a partial overlap that can be leveraged to support multiple queries efficiently.
+Consequently, we can think about:
+    - A composite index on {type, expire_date, city, level}: mongo uses a prefix for filtering so this will support both Q1 and Q7
+    ```
+    db.jobOffers.createIndex({ type: 1, expire_date: 1, city: 1, level: 1 });
+    ```
+    - We can follow a similar approach to combine Q1 and Q3 obtaining an index on {expire_date, type, country}
+    ```
+    db.jobOffers.createIndex({ expire_date: 1, type: 1, country: 1 });
+    ```
+    - Then, we think about having a compound unique index to enforce key constraint on the aggregate key {title, companyName}: given that type and expire_date are in partial overlap between queries we select them as a shard key. Here the unique index:
+    ```
+    db.jobOffers.createIndex(
+      { type: 1, expire_date: 1, title: 1, companyName: 1 },
+      { unique: true }
+    );
+    ``` 
 - Shard collection
 ```
-
+db.adminCommand({
+  shardCollection: "db.JobOffer",
+  key: { type: 1, expire_date: 1 }
+});
 ```
 - Q1:
 ```
@@ -281,4 +297,86 @@ Selection attributes for Q7: {type, city, level}
 - Q7:
 ```
   ????????
+```
+
+## (7) Design in Cassandra
+
+### Queries associated with Skill: Q6
+Selection attributes for Q6: {score, type} <!-- benefit type -->
+
+Skill: <!-- Q6 -->
+{
+    <ins>name</ins>,score,
+    provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
+}
+
+- Given that we have only one query we can safely select {score, type} as partition key, while for the primary key we have to add the aggregate key "name" in order to have the aggregate identifier. We obtain:
+    - Partition key = {score, type}
+    - Primary key = {score, key, name} with name as clustering column
+- Here are the CREATE commands in Cassandra:
+```
+  CREATE TYPE benefit_t (
+    type text
+);
+
+CREATE TABLE Skills (
+    name text,
+    score int,
+    type text,
+    provides set<frozen<benefit_t>>,
+    PRIMARY KEY ((score, type), name)
+);
+
+```
+In summary:
+
+TYPE benefit_t defines the structure for benefits for semantic reasons
+((score, type)) as partition key ensures data is grouped by score and type
+name as clustering column differentiates entries within each (score, type) partition
+provides represents the benefits associated with a skill as a set of the previously created frozen benefit_t
+
+- Q6:
+```
+SELECT name
+FROM Skills
+WHERE score > 70 AND type = '401(k)';
+```
+
+### Queries associated with IndustryDomain: Q4
+Selection attributes for Q4: {name} <!-- IndustryDomain name -->
+
+### IndustryDomain: <!-- Q4 -->
+{
+    <ins>name</ins>,
+    operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
+}
+
+- Given that name is both the only selection attribute and the aggregate key we only have to select it as Partition Key!
+    - Partition key = {name}
+- Here are the CREATE commands in Cassandra:
+```
+CREATE TYPE job_t (
+    type text
+);
+
+CREATE TYPE company_t (
+    job list<frozen<job_t>>
+);
+
+CREATE TABLE IndustryDomain (
+    name text PRIMARY KEY,
+    operated list<frozen<company_t>>
+);
+```
+In summary:
+
+TYPE job_t represents the type of jobs associated with a company
+TYPE company_t represents a company, with its associated job types encapsulated as a list of job_t
+IndustryDomain uses name as the Partition Key & the operated field stores the hierarchical relationship of companies and jobs.
+
+- Q4:
+```
+SELECT operated 
+FROM IndustryDomain 
+WHERE name = 'Technology';
 ```
