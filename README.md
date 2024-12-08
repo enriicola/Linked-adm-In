@@ -331,8 +331,11 @@ CREATE TABLE Skills (
 In summary:
 
 TYPE benefit_t defines the structure for benefits for semantic reasons
+
 ((score, type)) as partition key ensures data is grouped by score and type
+
 name as clustering column differentiates entries within each (score, type) partition
+
 provides represents the benefits associated with a skill as a set of the previously created frozen benefit_t
 
 - Q6:
@@ -371,7 +374,9 @@ CREATE TABLE IndustryDomain (
 In summary:
 
 TYPE job_t represents the type of jobs associated with a company
+
 TYPE company_t represents a company, with its associated job types encapsulated as a list of job_t
+
 IndustryDomain uses name as the Partition Key & the operated field stores the hierarchical relationship of companies and jobs.
 
 - Q4:
