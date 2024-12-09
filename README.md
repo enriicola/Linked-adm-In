@@ -10,9 +10,9 @@ final project for the Advanced Data Mangaement course
 - [x] 6. Design in MongoDB:
     - [x] a. Design a schema for MongoDB (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
     - [x] b. Specify each operation of the workload in the language supported by MongoDB
-- [ ] 7. Design in Cassandra:
-    - [ ] a. Design a schema for Cassandra  (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
-    - [ ] b. Specify in CQL each operation of the workload.
+- [x] 7. Design in Cassandra:
+    - [x] a. Design a schema for Cassandra  (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
+    - [x] b. Specify in CQL each operation of the workload.
 - [ ] 8. Design in Neo4J:
     - [ ] a. Design a schema for Neo4j, using the approaches/methodologies proposed in the course.
     - [ ] b. Specify in Neo4j each operation of the workload.
@@ -544,7 +544,7 @@ Selection attributes for Q7: {type, city, level}
         Shared attribute: expire_date.
         Partitioning by expire_date allows efficient filtering for both queries.
 
-    -Option 2: Combine Q1 and Q7
+    - Option 2: Combine Q1 and Q7
         Shared attribute: type.
         Partitioning by type allows efficient filtering for both queries.
   
