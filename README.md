@@ -7,9 +7,9 @@ final project for the Advanced Data Mangaement course
 - [X] 3. Design a conceptual schema for the identified domain. The schema should include at least three associations.
 - [X] 4. Identify a workload, i.e., a set of relevant and frequent operations, related to the chosen application. The workload should contain at least 5 structurally different operations. Describe each workload operation in natural language.
 - [X] 5. Use the aggregate-oriented design methodology (STEP 1-2-3) to design a set of aggregates for the domain and the workload at hand.
-- [ ] 6. Design in MongoDB:
-    - [ ] a. Design a schema for MongoDB (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
-    - [ ] b. Specify each operation of the workload in the language supported by MongoDB
+- [x] 6. Design in MongoDB:
+    - [x] a. Design a schema for MongoDB (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
+    - [x] b. Specify each operation of the workload in the language supported by MongoDB
 - [ ] 7. Design in Cassandra:
     - [ ] a. Design a schema for Cassandra  (including partition keys and indexes), starting from (step 5), using the approaches/methodologies proposed in the course.
     - [ ] b. Specify in CQL each operation of the workload.
