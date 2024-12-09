@@ -53,8 +53,8 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
     Write operations occur moderately, primarily when new jobs, companies, skills, or benefits are added to the system. These updates may include inserting related attributes like market values, skill scores, or job expiration dates.
     
     Batch Processing
-    Batch imports can be essential only during initialization or when large updates to the dataset occur, such as integrating new company records, updated job postings, or expanded benefit types.
-    Efficient batch processing should ensure data consistency, especially when dealing with related entities (e.g. associating a job with the correct company and required skills during import)
+    Batch imports can be essential only during initialization because no large updates to the dataset will occur. 
+    The only updates might be occasionaly integrating new company records or updated job postings.
     
     Consistency and Availability
     Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries.
@@ -199,7 +199,40 @@ db.adminCommand({
 
 - Q4:
 ```
-  ?????????????
+  db.industryDomains.aggregate([
+  {
+    $match: {
+      name: "Technology"
+    }
+  },
+  {
+    $unwind: "$operated"
+  },
+  {
+    $unwind: "$operated.company"
+  },
+  {
+    $unwind: "$operated.company.job"
+  },
+  {
+    $project: {
+      _id: 0,
+      jobType: "$operated.company.job.type"
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      jobTypes: { $addToSet: "$jobType" }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      jobTypes: 1
+    }
+  }
+]);
 ```
 
 ### Queries associated with Company: Q2, Q5
@@ -244,7 +277,35 @@ Then, after having thought about both queries, we create a mixed non-unique inde
 
 - Q5:
 ```
-  ????????
+  db.companies.aggregate([
+  {
+    $match: {
+      country: "Italy", // Filter for Italian companies
+      industryName: "Technology" // Filter for the Technology domain
+    }
+  },
+  {
+    $unwind: "$job_offers" // Unwind the job_offers array
+  },
+  {
+    $project: {
+      _id: 0, // Exclude the _id field
+      jobType: "$job_offers.job.type" // Project the job type
+    }
+  },
+  {
+    $group: {
+      _id: null, // Group all job types together
+      jobTypes: { $addToSet: "$jobType" } // Collect unique job types
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      jobTypes: 1 // Keep only the jobTypes field in the output
+    }
+  }
+]);
 ```
 
 ### Queries associated with JobOffer: Q1, Q3, Q7
@@ -286,17 +347,56 @@ db.adminCommand({
 ```
 - Q1:
 ```
-  ????????
+  db.jobOffers.find(
+  {
+    type: "Full-time",
+    expire_date: { $lte: new Date(new Date().setDate(new Date().getDate() + 30)) }
+  },
+  {
+    _id: 0
+  }
+);
 ```
 
 - Q3:
 ```
-  ????????
+  db.jobOffers.aggregate([
+  {
+    $match: {
+      country: "Russia",
+      expire_date: { $gt: new Date(new Date().setDate(new Date().getDate() + 60)) }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      companyName: 1,
+      marketValue: 1
+    }
+  },
+  {
+    $group: {
+      _id: "$companyName", // Group by company name
+      marketValue: { $first: "$marketValue" } // Collect the first market value (one value per company!)
+    }
+  }
+]);
 ```
+Side note on this Q3: $first is used in MongoDB grouping to select the first encountered value of a field (e.g., marketValue) that is not part of the grouping key, providing a simple and efficient way to handle such fields without requiring computation.
 
 - Q7:
 ```
-  ????????
+  db.jobOffers.find(
+  {
+    type: "Internship",
+    city: "Campobasso",
+    "requires.skill.level": "Beginner"
+  },
+  {
+    _id: 0,
+    title: 1
+  }
+);
 ```
 
 ## (7) Design in Cassandra
