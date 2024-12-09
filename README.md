@@ -526,6 +526,18 @@ CREATE TABLE Company5 (
 ```
 Company2 will be used for executing Q2 and Company5 for executing Q5.
 
+A further analysis can lead us to optimize, for example, C5 table by removing unnecessary fields (we still have C2 for other fields if required, so no needs to include extra field on a table that should be mainly tailored to allow the execution of query 5.
+```
+CREATE TABLE Company5 (
+    country TEXT,
+    industryName TEXT,
+    name TEXT,
+    job_offers LIST<FROZEN<job_t>>,
+    PRIMARY KEY ((country, industryName), name)
+);
+
+```
+
 ### Queries associated with JobOffer: Q1, Q3, Q7
 Selection attributes for Q1: {type, expire_date}
 
@@ -550,8 +562,8 @@ Selection attributes for Q7: {type, city, level}
   
 --> We decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter).
 ```
-CREATE TYPE job_t (
-    type text
+CREATE TYPE skill_t (
+    level text
 );
 
 CREATE TABLE Job1_3 (
@@ -562,7 +574,7 @@ CREATE TABLE Job1_3 (
     companyName text,
     city text,
     marketValue double,
-    requires list<frozen<job_t>>,
+    requires list<frozen<skill_t>>,
     PRIMARY KEY (expire_date, type, country, title, companyName)
 );
 
@@ -574,7 +586,18 @@ CREATE TABLE Job7 (
     companyName text,
     city text,
     marketValue double,
-    requires list<frozen<job_t>>,
+    requires list<frozen<skill_t>>,
+    PRIMARY KEY ((type, city, level), title, companyName)
+);
+```
+A further analysis can lead us to optimize, for example, Job7 table by removing unnecessary fields (we still have Job1_3 for other fields if required, so no needs to include extra field on a table that should be mainly tailored to allow the execution of query 7.
+```
+CREATE TABLE Job7 (
+    type text,
+    city text,
+    level text,
+    title text,
+    companyName text,
     PRIMARY KEY ((type, city, level), title, companyName)
 );
 ```
