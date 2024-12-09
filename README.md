@@ -603,3 +603,8 @@ CREATE TABLE Job7 (
 ```
 
 ## (8) Design in Neo4J
+
+![graph](https://github.com/user-attachments/assets/3680f296-22f0-4a47-8fa3-324540351316)
+
+Query workload in Neo4J:
+
