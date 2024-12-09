@@ -535,7 +535,19 @@ CREATE TABLE Company5 (
     job_offers LIST<FROZEN<job_t>>,
     PRIMARY KEY ((country, industryName), name)
 );
+```
 
+- Q2:
+```
+SELECT name 
+FROM Company2 
+WHERE city = 'New York' AND marketValue > 1000000.0;
+```
+- Q5:
+```
+SELECT job_offers 
+FROM Company5 
+WHERE country = 'Italy' AND industryName = 'Technology';
 ```
 
 ### Queries associated with JobOffer: Q1, Q3, Q7
@@ -602,11 +614,32 @@ CREATE TABLE Job7 (
 );
 ```
 
+- Q1:
+```
+SELECT * 
+FROM Job1_3 
+WHERE type = 'Full-time' AND expire_date <= toDate(now()) + 30;
+```
+- Q3:
+```
+SELECT companyName, marketValue 
+FROM Job1_3 
+WHERE country = 'Russia' AND expire_date > toDate(now()) + 60;
+```
+- Q7:
+```
+SELECT title 
+FROM Job7 
+WHERE type = 'Internship' 
+  AND city = 'Campobasso' 
+  AND level = 'Beginner';
+```
+
 ## (8) Design in Neo4J
 
 ![graph](https://github.com/user-attachments/assets/3680f296-22f0-4a47-8fa3-324540351316)
 
-Query workload in Neo4J:
+Query workload in Neo4J (from 1 to 7):
 
 ```
 MATCH (j:Job)
