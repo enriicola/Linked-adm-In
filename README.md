@@ -280,29 +280,29 @@ Then, after having thought about both queries, we create a mixed non-unique inde
   db.companies.aggregate([
   {
     $match: {
-      country: "Italy", // Filter for Italian companies
-      industryName: "Technology" // Filter for the Technology domain
+      country: "Italy",
+      industryName: "Technology"
     }
   },
   {
-    $unwind: "$job_offers" // Unwind the job_offers array
-  },
-  {
-    $project: {
-      _id: 0, // Exclude the _id field
-      jobType: "$job_offers.job.type" // Project the job type
-    }
-  },
-  {
-    $group: {
-      _id: null, // Group all job types together
-      jobTypes: { $addToSet: "$jobType" } // Collect unique job types
-    }
+    $unwind: "$job_offers"
   },
   {
     $project: {
       _id: 0,
-      jobTypes: 1 // Keep only the jobTypes field in the output
+      jobType: "$job_offers.job.type"
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      jobTypes: { $addToSet: "$jobType" }
+    }
+  },
+  {
+    $project: {
+      _id: 0, // the grouping creates again an _id :(
+      jobTypes: 1
     }
   }
 ]);
@@ -484,4 +484,97 @@ IndustryDomain uses name as the Partition Key & the operated field stores the hi
 SELECT operated 
 FROM IndustryDomain 
 WHERE name = 'Technology';
+```
+
+### Queries associated with Company: Q2, Q5
+Selection attributes for Q2: {city, mv}
+
+Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
+
+### Company: <!-- Q2, Q5 -->
+{
+    <ins>name</ins>, marketValue, country, city,
+    job_offers: [{job: {type}}],
+    industryName <!-- simple attribute because it comes from a (1,1) association -->
+}
+
+- Unlikely the intersection between Q2 and Q5 selection attributes is empty: The only solution is to split the aggregate into two column-families!
+```
+CREATE TYPE job_t (
+    type text
+);
+
+CREATE TABLE Company2 (
+    city text,
+    marketValue double,
+    name text,
+    country text,
+    job_offers list<frozen<job_t>>,
+    industryName text,
+    PRIMARY KEY ((city, marketValue), name)
+);
+
+CREATE TABLE Company5 (
+    city text,
+    marketValue double,
+    name text,
+    country text,
+    job_offers list<frozen<job_t>>,
+    industryName text,
+    PRIMARY KEY ((country, industryName), name)
+);
+```
+Company2 will be used for executing Q2 and Company5 for executing Q5.
+
+### Queries associated with JobOffer: Q1, Q3, Q7
+Selection attributes for Q1: {type, expire_date}
+
+Selection attributes for Q3: {country, expire_date}
+
+Selection attributes for Q7: {type, city, level}
+
+### JobOffer: <!-- Q1, Q3, Q7 -->
+{
+    <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
+    requires: [{skill: {level}}]
+}
+
+- Given our partial overlap we are able to carefully design this solution. Here are two candidate pairings:
+    - Option 1: Combine Q1 and Q3
+        Shared attribute: expire_date.
+        Partitioning by expire_date allows efficient filtering for both queries.
+
+    -Option 2: Combine Q1 and Q7
+        Shared attribute: type.
+        Partitioning by type allows efficient filtering for both queries.
+  
+--> We decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter).
+```
+CREATE TYPE job_t (
+    type text
+);
+
+CREATE TABLE Job1_3 (
+    expire_date DATE,
+    type text,
+    country text,
+    title text,
+    companyName text,
+    city text,
+    marketValue double,
+    requires list<frozen<job_t>>,
+    PRIMARY KEY (expire_date, type, country, title, companyName)
+);
+
+CREATE TABLE Job7 (
+    expire_date DATE,
+    type text,
+    country text,
+    title text,
+    companyName text,
+    city text,
+    marketValue double,
+    requires list<frozen<job_t>>,
+    PRIMARY KEY ((type, city, level), title, companyName)
+);
 ```
