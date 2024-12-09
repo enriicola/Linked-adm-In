@@ -601,3 +601,5 @@ CREATE TABLE Job7 (
     PRIMARY KEY ((type, city, level), title, companyName)
 );
 ```
+
+## (8) Design in Neo4J
