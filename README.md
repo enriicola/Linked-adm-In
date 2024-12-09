@@ -608,3 +608,34 @@ CREATE TABLE Job7 (
 
 Query workload in Neo4J:
 
+```
+MATCH (j:Job)
+WHERE j.type = 'Full-time' AND j.exp_date <= date() + duration({days: 30})
+RETURN j
+
+MATCH (c:Company)
+WHERE c.city = 'New York' AND c.mv > 1000000
+RETURN c.name
+
+MATCH (c:Company {country = 'Russia'})-[:LISTS]->(j:Job)
+WHERE j.exp_date > date() + duration({days: 60})
+RETURN c.name, c.mv
+
+MATCH (id:IndustryDomain)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
+WHERE id.name = 'Technology'
+RETURN j.type
+
+MATCH (id:IndustryDomain)<-[:OPERATES_IN]-(c:Company {country: 'Italy'})-[:LISTS]->(j:Job)
+WHERE id.name = 'Technology'
+RETURN j.type
+
+MATCH (s:Skill)<-[:REQUIRES]-(j:Job)-[:OFFERS]->(b:Benefit)
+WHERE s.score > 70 AND b.type = '401(k)'
+RETURN s.name
+
+MATCH (j:Job {type: 'Internship'})-[:REQUIRES]->(s:Skill {level: 'Beginner'}), 
+      (j)<-[:LISTS]-(c:Company {city: 'Campobasso'})
+RETURN j.title
+```
+
+Note: when it comes on choosing whether to put "WHERE" or leveraging "{...}" the decision relies on both flexibility and clarity. For complex conditions we chose WHERE, while for simple conditions of the "starting" node in the path we opted for a direct {...} inside the MATCH parenthesis.
