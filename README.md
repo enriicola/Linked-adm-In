@@ -53,7 +53,7 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
     Write operations occur moderately, primarily when new jobs, companies, skills, or benefits are added to the system. These updates may include inserting related attributes like market values, skill scores, or job expiration dates.
     
     Batch Processing
-    Batch imports can be essential only during initialization because no large updates to the dataset will occur. 
+    No Batch processing, beacause the only big import can be required during initialization: no large updates to the dataset will occur. 
     The only updates might be occasionaly integrating new company records or updated job postings.
     
     Consistency and Availability
