@@ -106,7 +106,7 @@ The following conceptual schema captures key entities and their relationships:
     Query 6: Retrieve name of skills required for jobs offering benefits of type 401(k) and having a score above 70.
     Q6(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill(name)_!])
 
-    Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Campobasso
+    Query 7: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Hamburg
     Q7(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
     
 ![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
@@ -388,7 +388,7 @@ Side note on this Q3: $first is used in MongoDB grouping to select the first enc
   db.jobOffers.find(
   {
     type: "Internship",
-    city: "Campobasso",
+    city: "Hamburg",
     "requires.skill.level": "Beginner"
   },
   {
@@ -630,7 +630,7 @@ WHERE country = 'Russia' AND expire_date > toDate(now()) + 60;
 SELECT title 
 FROM Job7 
 WHERE type = 'Internship' 
-  AND city = 'Campobasso' 
+  AND city = 'Hamburg' 
   AND level = 'Beginner';
 ```
 
@@ -666,7 +666,7 @@ WHERE s.score > 70 AND b.type = '401(k)'
 RETURN s.name
 
 MATCH (j:Job {type: 'Internship'})-[:REQUIRES]->(s:Skill {level: 'Beginner'}), 
-      (j)<-[:LISTS]-(c:Company {city: 'Campobasso'})
+      (j)<-[:LISTS]-(c:Company {city: 'Hamburg'})
 RETURN j.title
 ```
 
