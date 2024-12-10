@@ -706,25 +706,28 @@ We need:
 - High RAM size for data traversal (Neo4J instance will be enough for our dataset's size)
 
 If really implementing a scalable business solution, we would also need a clustering mechanisms to ensure high avaibility and causal consistency (let's remember that Neo4J is a CA system and it relies on causal consistency). Let's make an example configuration:
+
         ```
         causal_clustering.enabled=true
         causal_clustering.minimum_core_cluster_size_at_runtime=3
         ```
+        
 Then, when deploying Neo4j for a read-intensive workload with high availability and potential fault tolerance, the "R + W > N" rule becomes crucial: R (# of replicas that respond to read requests) and W (# of core nodes required for a successful write) must exceed the total number of N (core nodes in the cluster). Keeping in mind that in Neo4J each write operation is replicated across core nodes to keep consistency we have to carefully choose values for N, W and N.
-    - As said before N = 3 (so with a fault tolerance of 1 node failure and therefore a minimum quorum of 2 nodes)
-    - We can set W = 2 (at minimum 2 nodes have to commit a write for it being successfull)
-        ```
-        dbms.cluster.minimum_core_write_quorum=2
-        ```
-    - We can set R = 2 (at least 2 replicas have to respond to that request)
-        ```
-        causal_clustering.read_replica_count=2
-        ```
-    - R + W in this scenario = 4, that indeed is higher then N = 3!
 
+- As said before N = 3 (so with a fault tolerance of 1 node failure and therefore a minimum quorum of 2 nodes)
+- We can set W = 2 (at minimum 2 nodes have to commit a write for it being successfull)
+  ```
+  dbms.cluster.minimum_core_write_quorum=2
+  ```
+- We can set R = 2 (at least 2 replicas have to respond to that request)
+  ```
+  causal_clustering.read_replica_count=2
+  ```
+- R + W in this scenario = 4, that indeed is higher then N = 3!
+    
 Then, to scale-up in our read-intensive application, we would need to increase the read replicas.
 
-For example, the following might be a feasible job board scenario, in which the course concepts could be highly applied:
+For example, the following might be a feasible _job board_ scenario, in which the course concepts could be highly applied:
 
 To scale up in our read-intensive application we would primarily focus on increasing the number of read replicas, which in Neo4j are dedicated nodes that serve only read queries, offloading the weight from the core nodes and allowing the system to handle significantly higher query volumes.
 
