@@ -686,6 +686,7 @@ Given that our application is:
     - Cypher queries easily handles our workload, as opposed to MongoDB.
     - Our modelled graph is able to direclty reflect the conceptual schema, as opposed to Cassandra.
     - Perfectly suitable for high avaibility and read-intensive data
+    - CA tailored
     
 The only weakness is with respect to scalability of writes, but as we said the percentage of write operations is hugely lower than the write one (also, write operations are limited to little additions of new jobs when occasionaly they pop-up).
 
@@ -697,13 +698,95 @@ The only weakness is with respect to scalability of writes, but as we said the p
     - Multiple denormalized tables, originated to a schema design that has to be tailored to specific queries (that present multiple disjoint scenarios with respect to selection attributes)
     - No query flexibility for future workload changes, highly probable in this dynamic world of jobs.
 
-## (12) Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
+## (10) Neo4J: Configuration details
+
+We need:
+- Neo4J Aura instance to implement our system
+- Query performance optimization by indexing when feasible (see (13))
+- High RAM size for data traversal (Neo4J instance will be enough for our dataset's size)
+
+If really implementing a scalable business solution, we would also need a clustering mechanisms to ensure high avaibility and causal consistency (let's remember that Neo4J is a CA system and it relies on causal consistency). Let's make an example configuration:
+        ```
+        causal_clustering.enabled=true
+        causal_clustering.minimum_core_cluster_size_at_runtime=3
+        ```
+Then, when deploying Neo4j for a read-intensive workload with high availability and potential fault tolerance, the "R + W > N" rule becomes crucial: R (# of replicas that respond to read requests) and W (# of core nodes required for a successful write) must exceed the total number of N (core nodes in the cluster). Keeping in mind that in Neo4J each write operation is replicated across core nodes to keep consistency we have to carefully choose values for N, W and N.
+    - As said before N = 3 (so with a fault tolerance of 1 node failure and therefore a minimum quorum of 2 nodes)
+    - We can set W = 2 (at minimum 2 nodes have to commit a write for it being successfull)
+        ```
+        dbms.cluster.minimum_core_write_quorum=2
+        ```
+    - We can set R = 2 (at least 2 replicas have to respond to that request)
+        ```
+        causal_clustering.read_replica_count=2
+        ```
+    - R + W in this scenario = 4, that indeed is higher then N = 3!
+
+Then, to scale-up in our read-intensive application, we would need to increase the read replicas.
+For example, if implementing a job board (actually our startup scenario!), 
+..
+..........
+
+## (11) Neo4J: Schema details
+
+Given Neo4J schema-less nature we don't have to provide any schema details (like in Cassandra for example, where we would have needed some table specifications). Here we just need to dynamically create nodes and their relationships, as we'll do in the next step.
+Nevertheless, here follows a basic **example** on how the nodes should appear in our database insertion:
+
+```
+CREATE (:Industry {name: 'Data management'});
+CREATE (:Company {name: 'Unige', mv: 'Data management', country: 'Italy', city: 'Genova', zipcode: '16100'});
+CREATE (:Job {type: 'Full-time', exp_date: '2025-01-01', title: 'Pitch creator'});
+CREATE (:Skill {name: 'Video editor', level: 'Advanced', score: 85});
+CREATE (:Benefit {type: 'mark', ev: '110L'});
+
+MATCH (j:Job {title: 'Pitch creator'}), 
+      (c:Company {name: 'Unige'}), 
+      (i:Industry {name: 'Data management'}), 
+      (s:Skill {name: 'Video editor'}), 
+      (b:Benefit {type: 'mark'})
+CREATE (c)-[:LISTS]->(j);
+CREATE (j)-[:OPERATES_IN]->(i);
+CREATE (j)-[:REQUIRES]->(s);
+CREATE (j)-[:OFFERS]->(b);
+CREATE (c)-[:OPERATES_IN]->(i);
+```
+
+## (12) Neo4J: Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
     - [ ] a. You can use an already available dataset. The dataset should have a reasonable size (few Mb).
     - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
 
+## (13) Neo4J: Workload implementation
 
+- Here follows the workload implementation on Neo4J
 
+  << DA METTERE QUA I COMANDI E LE LORO ESECUZIONI ED EXPLAIN >>
 
+- Here are some indexes that could enhance systems' capabilities:
 
+```
+// Job node indexes
+CREATE INDEX FOR (j:Job) ON (j.type);
+CREATE INDEX FOR (j:Job) ON (j.exp_date);
 
+// Company node indexes
+CREATE INDEX FOR (c:Company) ON (c.city);
+CREATE INDEX FOR (c:Company) ON (c.mv);
+CREATE INDEX FOR (c:Company) ON (c.country);
 
+// IndustryDomain node indexes
+CREATE INDEX FOR (id:IndustryDomain) ON (id.name);
+
+// Skill node indexes
+CREATE INDEX FOR (s:Skill) ON (s.score);
+CREATE INDEX FOR (s:Skill) ON (s.level);
+
+// Benefit node indexes
+CREATE INDEX FOR (b:Benefit) ON (b.type);
+
+// Composite indexes
+CREATE INDEX FOR (j:Job) ON (j.type, j.exp_date);
+CREATE INDEX FOR (c:Company) ON (c.city, c.mv);
+CREATE INDEX FOR (c:Company) ON (c.country, c.mv);
+```
+
+<< CONTROLLARE LE VARIE QUERY DOPO AVER MESSO GLI INDICI >>
