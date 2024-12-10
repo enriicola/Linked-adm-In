@@ -1,5 +1,5 @@
 # Linked-adm-In
-final project for the Advanced Data Mangaement course
+Final project for the Advanced Data Mangaement course
 
 ### Assignment Steps:
 - [X] 1. Propose a domain you are interested in and a relevant application for it (e.g.,e-commerce domain, shopping cart and session data management application). Take inspirations from datasets available online (e.g., on https://www.kaggle.com).
@@ -139,7 +139,6 @@ The following conceptual schema captures key entities and their relationships:
 }
 
 ### Note: inspect .md to see comments
-
 
 ## (6) Design in MongoDB 
 
@@ -673,21 +672,30 @@ RETURN j.title
 
 Note: when it comes on choosing whether to put "WHERE" or leveraging "{...}" the decision relies on both flexibility and clarity. For complex conditions we chose WHERE, while for simple conditions of the "starting" node in the path we opted for a direct {...} inside the MATCH parenthesis.
 
+## (9) System S choice:
 
+Given that our application is:
+    - predominanty read-intensive
+    - with high avaibility constraints
+    - some consistency constraints
+    - no need of batch-processing
+    - highly relational queries
 
+- We select **Neo4J** as system S for suitable backend for our application. This is driven by the following reasonings:
+    - The application is centered on relationships and traversals (e.g linking jobs to companies, industries, skills, and benefits), as graph databases benefits provide.
+    - Cypher queries easily handles our workload, as opposed to MongoDB.
+    - Our modelled graph is able to direclty reflect the conceptual schema, as opposed to Cassandra.
+    - Perfectly suitable for high avaibility and read-intensive data
+    
+The only weakness is with respect to scalability of writes, but as we said the percentage of write operations is hugely lower than the write one (also, write operations are limited to little additions of new jobs when occasionaly they pop-up).
 
+- We discarded MongoDB due to:
+    - unintuitive relationships handling
+    - not so optimized aggregation pipelines on most of the queries (due to them being highly relational)
 
-
-
-
-
-
-
-
-
-
-
-
+- We discarded Cassandra due to:
+    - Multiple denormalized tables, originated to a schema design that has to be tailored to specific queries (that present multiple disjoint scenarios with respect to selection attributes)
+    - No query flexibility for future workload changes, highly probable in this dynamic world of jobs.
 
 ## (12) Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
     - [ ] a. You can use an already available dataset. The dataset should have a reasonable size (few Mb).
