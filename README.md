@@ -707,10 +707,10 @@ We need:
 
 If really implementing a scalable business solution, we would also need a clustering mechanisms to ensure high avaibility and causal consistency (let's remember that Neo4J is a CA system and it relies on causal consistency). Let's make an example configuration:
 
-        ```
-        causal_clustering.enabled=true
-        causal_clustering.minimum_core_cluster_size_at_runtime=3
-        ```
+```
+causal_clustering.enabled=true
+causal_clustering.minimum_core_cluster_size_at_runtime=3
+```
         
 Then, when deploying Neo4j for a read-intensive workload with high availability and potential fault tolerance, the "R + W > N" rule becomes crucial: R (# of replicas that respond to read requests) and W (# of core nodes required for a successful write) must exceed the total number of N (core nodes in the cluster). Keeping in mind that in Neo4J each write operation is replicated across core nodes to keep consistency we have to carefully choose values for N, W and N.
 
