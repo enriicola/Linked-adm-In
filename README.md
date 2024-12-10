@@ -723,9 +723,14 @@ Then, when deploying Neo4j for a read-intensive workload with high availability 
     - R + W in this scenario = 4, that indeed is higher then N = 3!
 
 Then, to scale-up in our read-intensive application, we would need to increase the read replicas.
-For example, if implementing a job board (actually our startup scenario!), 
-..
-..........
+
+For example, the following might be a feasible job board scenario, in which the course concepts could be highly applied:
+
+To scale up in our read-intensive application we would primarily focus on increasing the number of read replicas, which in Neo4j are dedicated nodes that serve only read queries, offloading the weight from the core nodes and allowing the system to handle significantly higher query volumes.
+
+For example, our job-board scenario mentioned above, the system must handle a high volume of user queries. Since the majority of these operations are read-only, the read replicas can efficiently handle these requests without impacting the performance of the core nodes.
+
+So, in our previous example, as the number of users grows, we can step-by-step increase the number of read replicas depending on the query load; and since read replicas only need to synchronize with the core nodes periodically they can scale horizontally (and also being geographically replicated) without requiring changes to the core cluster configuration!
 
 ## (11) Neo4J: Schema details
 
