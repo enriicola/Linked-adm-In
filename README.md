@@ -690,7 +690,7 @@ Note: when it comes on choosing whether to put "WHERE" or leveraging "{...}" the
 
 
 ## (12) Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
-    - [ ] a. You can use either an already available dataset or a synthetic one but we encourage the first option (it might be difficult to synthetically generate a relevant dataset for your reference application). The dataset should have a reasonable size (few Mb).
+    - [ ] a. You can use an already available dataset. The dataset should have a reasonable size (few Mb).
     - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data 
 
 
