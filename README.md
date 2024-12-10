@@ -691,7 +691,7 @@ Note: when it comes on choosing whether to put "WHERE" or leveraging "{...}" the
 
 ## (12) Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
     - [ ] a. You can use an already available dataset. The dataset should have a reasonable size (few Mb).
-    - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data 
+    - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
 
 
 
