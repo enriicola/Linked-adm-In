@@ -16,7 +16,7 @@ Final project for the Advanced Data Mangaement course
 - [X] 8. Design in Neo4J:
     - [X] a. Design a schema for Neo4j, using the approaches/methodologies proposed in the course.
     - [X] b. Specify in Neo4j each operation of the workload.
-- [ ] 9. Discuss which, among the three systems, is the most suitable to be used as  back-end for your application. Motivate your choice, taking into account the features of your application (step 2) and the identified workload (step 4). Let S be the selected system.
+- [X] 9. Discuss which, among the three systems, is the most suitable to be used as  back-end for your application. Motivate your choice, taking into account the features of your application (step 2) and the identified workload (step 4). Let S be the selected system.
 - [ ] 10. Provide details about the system configuration needed in system S  for storing/processing your data according to the chosen application.
 - [ ] 11. Create the logical schema in system S.
 - [ ] 12. Create an instance of your schema in the selected system, according to the logical schema just created. To this aim:
