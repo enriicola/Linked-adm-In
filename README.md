@@ -847,6 +847,8 @@ a. (Specify classes and properties) + for each property, specify the correspondi
 ```
 @prefix ex: <http://example.org/schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 # Classes
 ex:Job a rdfs:Class .
@@ -860,6 +862,70 @@ ex:belongsTo a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Company .
 ex:requires a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Skill .
 ex:offers a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Benefit .
 ex:operatesIn a rdf:Property ; rdfs:domain ex:Company ; rdfs:range ex:IndustryDomain .
+
+
+# (Literal) Properties
+
+# Job
+ex:jobTitle a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:string .
+
+ex:jobType a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:string .
+
+ex:expireDate a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:date .
+
+# Company
+ex:companyName a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string .
+
+ex:country a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string .
+
+ex:city a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string .
+
+ex:zipCode a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string .
+
+ex:marketValue a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:decimal .
+
+# Attributes for IndustryDomain
+ex:industryName a rdf:Property ;
+    rdfs:domain ex:IndustryDomain ;
+    rdfs:range xsd:string .
+
+# Skill
+ex:skillName a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:string .
+
+ex:skillLevel a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:string .
+
+ex:skillScore a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:decimal .
+
+# Benefit
+ex:benefitType a rdf:Property ;
+    rdfs:domain ex:Benefit ;
+    rdfs:range xsd:string .
+
+ex:economicalValue a rdf:Property ;
+    rdfs:domain ex:Benefit ;
+    rdfs:range xsd:decimal .
 ```
     
 b. Express which classes are equivalent and which ones are disjoint.
