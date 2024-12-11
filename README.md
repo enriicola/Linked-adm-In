@@ -760,8 +760,25 @@ CREATE (c)-[:OPERATES_IN]->(i);
 ```
 
 ## (12) Neo4J: Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
-    - [ ] a. You can use an already available dataset. The dataset should have a reasonable size (few Mb).
-    - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
+
+We started from the linkedin-job-postings database and we continued by transforming it to meet our needs (removing unused fields and adding market value & economical value for queries enrichment).
+Here are the datasets links:
+
+<<dataset link>>
+
+These are the commands:
+
+```
+<<commands to insert>>
+```
+
+Then, we leveraged Neo4J Aura import to obtain the graph, obtaining the following graph:
+
+<<image>>
+
+Here is the exported Neo4J dataset:
+
+<<link>>
 
 ## (13) Neo4J: Workload implementation
 
