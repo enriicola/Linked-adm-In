@@ -836,4 +836,19 @@ CREATE INDEX FOR (c:Company) ON (c.city, c.mv);
 CREATE INDEX FOR (c:Company) ON (c.country, c.mv);
 ```
 
+Once Neo4j has located the starting node, traversals through relationships are very efficient (O(1) basically). However... finding the starting node in a query is where indexes come into play!
+
 << CONTROLLARE LE VARIE QUERY DOPO AVER MESSO GLI INDICI >>
+
+
+## (14) Model in RDFS / OWL the main classes and properties corresponding to the entities and associations in the conceptual schema:
+14. Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3). In addition:
+    
+      a. For each property, specify the corresponding domain and range.
+    
+      b. Express which classes are equivalent and which ones are disjoint.
+    
+      c. Specify (or add) at least an inverse property.
+    
+      d. For all the modeled properties, specify whether they are functional (or inverse functional).
+    
