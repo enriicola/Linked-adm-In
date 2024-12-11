@@ -792,6 +792,7 @@ MATCH (fromNode {name: row.from})
 MATCH (toNode {name: row.to})
 CREATE (fromNode)-[:`row.type`]->(toNode);
 ```
+We noted that, when loading the last CSV file (for the relationships), Neo4J was very slow due to its unfeasability on handling batch processing.
 
 Then, we leveraged Neo4J Aura import to obtain the graph, obtaining the following graph:
 
