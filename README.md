@@ -762,14 +762,35 @@ CREATE (c)-[:OPERATES_IN]->(i);
 ## (12) Neo4J: Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
 
 We started from the linkedin-job-postings database and we continued by transforming it to meet our needs (removing unused fields and adding market value & economical value for queries enrichment).
-Here are the datasets links:
 
-<<dataset link>>
-
-These are the commands:
-
+These are the commands (with the relative dataset links):
 ```
-<<commands to insert>>
+CREATE CONSTRAINT FOR (n:Job) REQUIRE n.title IS UNIQUE;
+CREATE CONSTRAINT FOR (n:Company) REQUIRE n.name IS UNIQUE;
+CREATE CONSTRAINT FOR (n:Skill) REQUIRE n.name IS UNIQUE;
+CREATE CONSTRAINT FOR (n:Benefit) REQUIRE n.type IS UNIQUE;
+CREATE CONSTRAINT FOR (n:Industry) REQUIRE n.name IS UNIQUE;
+
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/industry.csv' AS row
+CREATE (:Industry {name: row.name});
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/job.csv' AS row
+CREATE (:Job {title: row.title, type: row.type, exp_date: toInteger(row.exp_date)});
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/company.csv' AS row
+CREATE (:Company {name: row.name, country: row.country, city: row.city, zipcode: toInteger(row.zipcode), mv: row.mv});
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/skill.csv' AS row
+CREATE (:Skill {name: row.name, level: row.level, score: toFloat(row.score)});
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/benefit.csv' AS row
+CREATE (:Benefit {type: row.type, ev: row.ev});
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/relationships.csv' AS row
+MATCH (fromNode {name: row.from})
+MATCH (toNode {name: row.to})
+CREATE (fromNode)-[:`row.type`]->(toNode);
 ```
 
 Then, we leveraged Neo4J Aura import to obtain the graph, obtaining the following graph:
