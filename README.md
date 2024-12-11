@@ -841,14 +841,30 @@ Once Neo4j has located the starting node, traversals through relationships are v
 << CONTROLLARE LE VARIE QUERY DOPO AVER MESSO GLI INDICI >>
 
 
-## (14) Model in RDFS / OWL the main classes and properties corresponding to the entities and associations in the conceptual schema:
-14. Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3). In addition:
+## (14) Model in RDFS / OWL the main classes and properties
+
+a. (Specify classes and properties) + for each property, specify the corresponding domain and range.
+```
+@prefix ex: <http://example.org/schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Classes
+ex:Job a rdfs:Class .
+ex:Company a rdfs:Class .
+ex:IndustryDomain a rdfs:Class .
+ex:Skill a rdfs:Class .
+ex:Benefit a rdfs:Class .
+
+# Properties
+ex:belongsTo a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Company .
+ex:requires a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Skill .
+ex:offers a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Benefit .
+ex:operatesIn a rdf:Property ; rdfs:domain ex:Company ; rdfs:range ex:IndustryDomain .
+```
     
-      a. For each property, specify the corresponding domain and range.
+b. Express which classes are equivalent and which ones are disjoint.
     
-      b. Express which classes are equivalent and which ones are disjoint.
+c. Specify (or add) at least an inverse property.
     
-      c. Specify (or add) at least an inverse property.
-    
-      d. For all the modeled properties, specify whether they are functional (or inverse functional).
+d. For all the modeled properties, specify whether they are functional (or inverse functional).
     
