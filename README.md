@@ -17,12 +17,12 @@ Final project for the Advanced Data Mangaement course
     - [X] a. Design a schema for Neo4j, using the approaches/methodologies proposed in the course.
     - [X] b. Specify in Neo4j each operation of the workload.
 - [X] 9. Discuss which, among the three systems, is the most suitable to be used as  back-end for your application. Motivate your choice, taking into account the features of your application (step 2) and the identified workload (step 4). Let S be the selected system.
-- [ ] 10. Provide details about the system configuration needed in system S  for storing/processing your data according to the chosen application.
-- [ ] 11. Create the logical schema in system S.
-- [ ] 12. Create an instance of your schema in the selected system, according to the logical schema just created. To this aim:
-    - [ ] a. You can use either an already available dataset or a synthetic one but we encourage the first option (it might be difficult to synthetically generate a relevant dataset for your reference application). The dataset should have a reasonable size (few Mb).
-    - [ ] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
-    - [ ] c. For importing datasets in the chosen system, you should refer to the available documentation for the system you have selected (e.g. https://www.datastax.com/dev/blog/simple-data-importing-and-exporting-with-cassandra for Cassandra and https://neo4j.com/developer/guide-importing-data-and-etl/perneo4J for Neo4J).
+- [X] 10. Provide details about the system configuration needed in system S  for storing/processing your data according to the chosen application.
+- [X] 11. Create the logical schema in system S.
+- [X] 12. Create an instance of your schema in the selected system, according to the logical schema just created. To this aim:
+    - [X] a. You can use either an already available dataset or a synthetic one but we encourage the first option (it might be difficult to synthetically generate a relevant dataset for your reference application). The dataset should have a reasonable size (few Mb).
+    - [X] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
+    - [X] c. For importing datasets in the chosen system, you should refer to the available documentation for the system you have selected (e.g. https://www.datastax.com/dev/blog/simple-data-importing-and-exporting-with-cassandra for Cassandra and https://neo4j.com/developer/guide-importing-data-and-etl/perneo4J for Neo4J).
 - [ ] 13. Implement the workload in system S.
 - [ ] 14. Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3). In addition:
     - [ ] a. For each property, specify the corresponding domain and range.
