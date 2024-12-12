@@ -759,7 +759,7 @@ CREATE (j)-[:OFFERS]->(b);
 CREATE (c)-[:OPERATES_IN]->(i);
 ```
 
-## (12) Neo4J: Create an instance of your schema in the selected system ... 0xmYonyPlGmxOx1je29k25BMOMjEPUrkPXnBJEva7cU
+## (12) Neo4J: Graph details
 
 We started from the linkedin-job-postings database and we continued by transforming it to meet our needs (removing unused fields and adding market value & economical value for queries enrichment).
 
