@@ -934,3 +934,5 @@ c. Specify (or add) at least an inverse property.
     
 d. For all the modeled properties, specify whether they are functional (or inverse functional).
     
+# Presentation Link :)
+https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
