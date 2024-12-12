@@ -642,28 +642,29 @@ Query workload in Neo4J (from 1 to 7):
 
 ```
 MATCH (j:Job)
-WHERE j.type = 'Full-time' AND j.exp_date <= date() + duration({days: 30})
+WHERE j.type = 'Full-time'
+  AND date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 30})
 RETURN j
 
 MATCH (c:Company)
 WHERE c.city = 'New York' AND c.mv > 1000000
 RETURN c.name
 
-MATCH (c:Company {country = 'Russia'})-[:LISTS]->(j:Job)
-WHERE j.exp_date > date() + duration({days: 60})
-RETURN c.name, c.mv
+MATCH (c:Company {country: 'Russia'})-[:LISTS]->(j:Job)
+WHERE date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 60})
+RETURN DISTINCT c.name, c.mv
 
-MATCH (id:IndustryDomain)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
+MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
 WHERE id.name = 'Technology'
-RETURN j.type
+RETURN DISTINCT j.type
 
-MATCH (id:IndustryDomain)<-[:OPERATES_IN]-(c:Company {country: 'Italy'})-[:LISTS]->(j:Job)
+MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company {country: 'Italy'})-[:LISTS]->(j:Job)
 WHERE id.name = 'Technology'
-RETURN j.type
+RETURN DISTINCT j.type
 
 MATCH (s:Skill)<-[:REQUIRES]-(j:Job)-[:OFFERS]->(b:Benefit)
 WHERE s.score > 70 AND b.type = '401(k)'
-RETURN s.name
+RETURN DISTINCT s.name
 
 MATCH (j:Job {type: 'Internship'})-[:REQUIRES]->(s:Skill {level: 'Beginner'}), 
       (j)<-[:LISTS]-(c:Company {city: 'Hamburg'})
