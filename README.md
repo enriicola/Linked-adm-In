@@ -763,44 +763,152 @@ CREATE (c)-[:OPERATES_IN]->(i);
 
 We started from the linkedin-job-postings database and we continued by transforming it to meet our needs (removing unused fields and adding market value & economical value for queries enrichment).
 
-These are the commands (with the relative dataset links):
+These are our dataset links:
 ```
-CREATE CONSTRAINT FOR (n:Job) REQUIRE n.title IS UNIQUE;
-CREATE CONSTRAINT FOR (n:Company) REQUIRE n.name IS UNIQUE;
-CREATE CONSTRAINT FOR (n:Skill) REQUIRE n.name IS UNIQUE;
-CREATE CONSTRAINT FOR (n:Benefit) REQUIRE n.type IS UNIQUE;
-CREATE CONSTRAINT FOR (n:Industry) REQUIRE n.name IS UNIQUE;
-
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/industry.csv' AS row
-CREATE (:Industry {name: row.name});
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/job.csv' AS row
-CREATE (:Job {title: row.title, type: row.type, exp_date: toInteger(row.exp_date)});
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/company.csv' AS row
-CREATE (:Company {name: row.name, country: row.country, city: row.city, zipcode: toInteger(row.zipcode), mv: row.mv});
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/skill.csv' AS row
-CREATE (:Skill {name: row.name, level: row.level, score: toFloat(row.score)});
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/benefit.csv' AS row
-CREATE (:Benefit {type: row.type, ev: row.ev});
-
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/relationships.csv' AS row
-MATCH (fromNode {name: row.from})
-MATCH (toNode {name: row.to})
-CREATE (fromNode)-[:`row.type`]->(toNode);
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/company.csv
 ```
+```
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/job.csv
+```
+```
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/benefit.csv
+```
+```
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/industry.csv
+```
+```
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/skill.csv
+```
+```
+https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/relationships.csv
+```
+These are our Cypher scripts:
+```
+:param {
+  // Define the file path root and the individual file names required for loading.
+  // https://neo4j.com/docs/operations-manual/current/configuration/file-locations/
+  file_path_root: '[file:///](https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/)', // Change this to the folder your script can access the files at.
+  file_0: 'benefit.csv',
+  file_1: 'company.csv',
+  file_2: 'job.csv',
+  file_3: 'industry.csv',
+  file_4: 'skill.csv',
+  file_5: 'relationships.csv'
+};
+
+// CONSTRAINT creation
+// -------------------
+//
+// Create node uniqueness constraints, ensuring no duplicates for the given node label and ID property exist in the database. This also ensures no duplicates are introduced in future.
+//
+// NOTE: The following constraint creation syntax is generated based on the current connected database version 5.26-aura.
+CREATE CONSTRAINT title_Job_uniq IF NOT EXISTS
+FOR (n: Job)
+REQUIRE (n.title) IS UNIQUE;
+CREATE CONSTRAINT name_Company_uniq IF NOT EXISTS
+FOR (n: Company)
+REQUIRE (n.name) IS UNIQUE;
+CREATE CONSTRAINT name_Industry_uniq IF NOT EXISTS
+FOR (n: Industry)
+REQUIRE (n.name) IS UNIQUE;
+CREATE CONSTRAINT type_Benefit_uniq IF NOT EXISTS
+FOR (n: Benefit)
+REQUIRE (n.type) IS UNIQUE;
+CREATE CONSTRAINT name_Skill_uniq IF NOT EXISTS
+FOR (n: Skill)
+REQUIRE (n.name) IS UNIQUE;
+
+:param {
+  idsToSkip: []
+};
+
+// NODE load
+// ---------
+//
+// Load nodes in batches, one node label at a time. Nodes will be created using a MERGE statement to ensure a node with the same label and ID property remains unique. Pre-existing nodes found by a MERGE statement will have their other properties set to the latest values encountered in a load file.
+//
+// NOTE: Any nodes with IDs in the 'idsToSkip' list parameter will not be loaded.
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_2) AS row
+WITH row
+WHERE NOT row.title IN $idsToSkip AND NOT row.title IS NULL
+CALL {
+  WITH row
+  MERGE (n: Job { title: row.title })
+  SET n.title = row.title
+  SET n.type = row.type
+  SET n.exp_date = row.exp_date
+} IN TRANSACTIONS OF 10000 ROWS;
+
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_1) AS row
+WITH row
+WHERE NOT row.name IN $idsToSkip AND NOT row.name IS NULL
+CALL {
+  WITH row
+  MERGE (n: Company { name: row.name })
+  SET n.name = row.name
+  SET n.city = row.city
+  SET n.country = row.country
+  SET n.zipcode = toFloat(trim(row.zipcode))
+  SET n.mv = toInteger(trim(row.mv))
+} IN TRANSACTIONS OF 10000 ROWS;
+
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_3) AS row
+WITH row
+WHERE NOT row.name IN $idsToSkip AND NOT row.name IS NULL
+CALL {
+  WITH row
+  MERGE (n: Industry { name: row.name })
+  SET n.name = row.name
+} IN TRANSACTIONS OF 10000 ROWS;
+
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_0) AS row
+WITH row
+WHERE NOT row.type IN $idsToSkip AND NOT row.type IS NULL
+CALL {
+  WITH row
+  MERGE (n: Benefit { type: row.type })
+  SET n.type = row.type
+  SET n.ev = toInteger(trim(row.ev))
+} IN TRANSACTIONS OF 10000 ROWS;
+
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_4) AS row
+WITH row
+WHERE NOT row.name IN $idsToSkip AND NOT row.name IS NULL
+CALL {
+  WITH row
+  MERGE (n: Skill { name: row.name })
+  SET n.name = row.name
+  SET n.level = row.level
+  SET n.score = toInteger(trim(row.score))
+} IN TRANSACTIONS OF 10000 ROWS;
+
+
+// RELATIONSHIP load
+// -----------------
+//
+// Load relationships in batches, one relationship type at a time. Relationships are created using a MERGE statement, meaning only one relationship of a given type will ever be created between a pair of nodes.
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_5) AS row
+WITH row 
+CALL {
+  WITH row
+  MATCH (source: Job { title: row.from })
+  MATCH (target: Skill { name: row.to })
+  MERGE (source)-[r: REQUIRES]->(target)
+} IN TRANSACTIONS OF 10000 ROWS;
+
+LOAD CSV WITH HEADERS FROM ($file_path_root + $file_5) AS row
+WITH row 
+CALL {
+  WITH row
+  MATCH (source: Company { name: row.from })
+  MATCH (target: Job { title: row.to })
+  MERGE (source)-[r:
+```
+
+
 We noted that, when loading the last CSV file (for the relationships), Neo4J was very slow due to its unfeasability on handling batch processing.
 
-Then, we leveraged Neo4J Aura import to obtain the graph, obtaining the following graph:
 
-<<image>>
-
-Here is the exported Neo4J dataset:
-
-<<link>>
 
 ## (13) Neo4J: Workload implementation
 
