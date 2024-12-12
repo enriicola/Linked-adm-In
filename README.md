@@ -904,8 +904,10 @@ CALL {
   MATCH (target: Job { title: row.to })
   MERGE (source)-[r:
 ```
-
-
+## Graph visualization video:
+```
+hihih
+```
 We noted that, when loading the last CSV file (for the relationships), Neo4J was very slow due to its unfeasability on handling batch processing.
 
 
