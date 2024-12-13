@@ -912,7 +912,6 @@ hihih
 We noted that, when loading the last CSV file (for the relationships), Neo4J was very slow due to its unfeasability on handling batch processing.
 
 
-
 ## (13) Neo4J: Workload implementation
 
 - Here follows the workload implementation on Neo4J together with their execution explanation. We also decided to show some meaninfgul results with some indexes that could enhance systems' capabilities.
@@ -933,6 +932,7 @@ MATCH (c:Company {country: 'Russia'})-[:LISTS]->(j:Job)
 WHERE date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 60})
 RETURN DISTINCT c.name, c.mv
 ```
+
 ![1 2](https://github.com/user-attachments/assets/a63731d5-9965-4008-95c7-53ce3001dfeb)
 
 ```
@@ -948,6 +948,10 @@ Let's put some indexes:
 CREATE INDEX FOR (j:Job) ON (j.type);
 CREATE INDEX FOR (j:Job) ON (j.exp_date);
 ```
+
+The first query changed its execution plan in the following way:
+![1 1_idx](https://github.com/user-attachments/assets/2d0a92b3-67e1-49ef-981c-9f5de6e1a473)
+
 
 ```
 MATCH (c:Company)
