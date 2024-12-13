@@ -992,13 +992,13 @@ WHERE s.score > 70 AND b.type = '401(k)'
 RETURN DISTINCT s.name
 ```
 
+![4](https://github.com/user-attachments/assets/fe68911c-01a4-465a-b7fa-60e8634c8f80)
+
 Let's put some indexes:
 ```
 CREATE INDEX FOR (s:Skill) ON (s.score);
 CREATE INDEX FOR (s:Skill) ON (s.level);
 ```
-
-![4](https://github.com/user-attachments/assets/fe68911c-01a4-465a-b7fa-60e8634c8f80)
 
 Let's try with some composite indexes
 ```
