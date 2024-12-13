@@ -915,42 +915,84 @@ We noted that, when loading the last CSV file (for the relationships), Neo4J was
 
 ## (13) Neo4J: Workload implementation
 
-- Here follows the workload implementation on Neo4J
-
-  << DA METTERE QUA I COMANDI E LE LORO ESECUZIONI ED EXPLAIN >>
-
-- Here are some indexes that could enhance systems' capabilities:
+- Here follows the workload implementation on Neo4J together with their execution explanation. We also decided to show some meaninfgul results with some indexes that could enhance systems' capabilities.
+   
+Once Neo4j has located the starting node, traversals through relationships are very efficient (O(1) basically). However... finding the starting node in a query is where indexes come into play! 
 
 ```
-// Job node indexes
+MATCH (j:Job)
+WHERE j.type = 'Full-time'
+  AND date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 30})
+RETURN j
+```
+
+```
+MATCH (c:Company {country: 'Russia'})-[:LISTS]->(j:Job)
+WHERE date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 60})
+RETURN DISTINCT c.name, c.mv
+```
+
+```
+MATCH (j:Job {type: 'Internship'})-[:REQUIRES]->(s:Skill {level: 'Beginner'}), 
+      (j)<-[:LISTS]-(c:Company {city: 'Hamburg'})
+RETURN j.title
+```
+
+Let's put some indexes:
+```
 CREATE INDEX FOR (j:Job) ON (j.type);
 CREATE INDEX FOR (j:Job) ON (j.exp_date);
+```
 
-// Company node indexes
+```
+MATCH (c:Company)
+WHERE c.city = 'New York' AND c.mv > 1000000
+RETURN c.name
+```
+
+```
+MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company {country: 'Italy'})-[:LISTS]->(j:Job)
+WHERE id.name = 'Technology'
+RETURN DISTINCT j.type
+```
+
+Let's put some indexes:
+```
 CREATE INDEX FOR (c:Company) ON (c.city);
 CREATE INDEX FOR (c:Company) ON (c.mv);
 CREATE INDEX FOR (c:Company) ON (c.country);
+```
 
-// IndustryDomain node indexes
+```
+MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
+WHERE id.name = 'Technology'
+RETURN DISTINCT j.type
+```
+
+Let's put some indexes:
+```
 CREATE INDEX FOR (id:IndustryDomain) ON (id.name);
+Let's put some indexes:
+```
 
-// Skill node indexes
+```
+MATCH (s:Skill)<-[:REQUIRES]-(j:Job)-[:OFFERS]->(b:Benefit)
+WHERE s.score > 70 AND b.type = '401(k)'
+RETURN DISTINCT s.name
+```
+
+Let's put some indexes:
+```
 CREATE INDEX FOR (s:Skill) ON (s.score);
 CREATE INDEX FOR (s:Skill) ON (s.level);
+```
 
-// Benefit node indexes
-CREATE INDEX FOR (b:Benefit) ON (b.type);
-
-// Composite indexes
+Let's try with some composite indexes
+```
 CREATE INDEX FOR (j:Job) ON (j.type, j.exp_date);
 CREATE INDEX FOR (c:Company) ON (c.city, c.mv);
 CREATE INDEX FOR (c:Company) ON (c.country, c.mv);
 ```
-
-Once Neo4j has located the starting node, traversals through relationships are very efficient (O(1) basically). However... finding the starting node in a query is where indexes come into play!
-
-<< CONTROLLARE LE VARIE QUERY DOPO AVER MESSO GLI INDICI >>
-
 
 ## (14) Model in RDFS / OWL the main classes and properties
 
