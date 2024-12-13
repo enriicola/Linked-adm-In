@@ -949,7 +949,8 @@ CREATE INDEX FOR (j:Job) ON (j.type);
 CREATE INDEX FOR (j:Job) ON (j.exp_date);
 ```
 
-The first query changed its execution plan in the following way:
+The first query changed its execution plan in the following way, while the other two remained unchanged. In our opinion this can be related to the fact that in the first query the index matched with all the selection attributes.
+
 ![1 1_idx](https://github.com/user-attachments/assets/2d0a92b3-67e1-49ef-981c-9f5de6e1a473)
 
 
@@ -975,6 +976,11 @@ CREATE INDEX FOR (c:Company) ON (c.city);
 CREATE INDEX FOR (c:Company) ON (c.mv);
 CREATE INDEX FOR (c:Company) ON (c.country);
 ```
+
+![2 1_2](https://github.com/user-attachments/assets/cade8357-bfc9-4583-9b2b-1a6ff8bc29ff)
+
+
+The first query changed its execution plan in the following way, while the other one remained unchanged. In our opinion this can be related to the fact that in the second query the automatically created unique index on the primary key field "name" was indeed used (so no need to use the new ones).
 
 ```
 MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
