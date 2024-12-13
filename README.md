@@ -926,17 +926,22 @@ WHERE j.type = 'Full-time'
 RETURN j
 ```
 
+![1 1](https://github.com/user-attachments/assets/8957184d-45be-4ed0-8dfb-08ed394270a4)
+
 ```
 MATCH (c:Company {country: 'Russia'})-[:LISTS]->(j:Job)
 WHERE date(substring(j.exp_date, 0, 10)) <= date() + duration({days: 60})
 RETURN DISTINCT c.name, c.mv
 ```
+![1 2](https://github.com/user-attachments/assets/a63731d5-9965-4008-95c7-53ce3001dfeb)
 
 ```
 MATCH (j:Job {type: 'Internship'})-[:REQUIRES]->(s:Skill {level: 'Beginner'}), 
       (j)<-[:LISTS]-(c:Company {city: 'Hamburg'})
 RETURN j.title
 ```
+
+![1 3](https://github.com/user-attachments/assets/3ff1e947-fcee-4285-bde7-3dfc64d6f64c)
 
 Let's put some indexes:
 ```
@@ -950,11 +955,15 @@ WHERE c.city = 'New York' AND c.mv > 1000000
 RETURN c.name
 ```
 
+![2 1](https://github.com/user-attachments/assets/6e9239c4-1ce4-4519-88ca-d60c6a996472)
+
 ```
 MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company {country: 'Italy'})-[:LISTS]->(j:Job)
 WHERE id.name = 'Technology'
 RETURN DISTINCT j.type
 ```
+
+![2 2](https://github.com/user-attachments/assets/29e3938e-0787-41de-850c-91ecb4278164)
 
 Let's put some indexes:
 ```
@@ -968,6 +977,8 @@ MATCH (id:Industry)<-[:OPERATES_IN]-(c:Company)-[:LISTS]->(j:Job)
 WHERE id.name = 'Technology'
 RETURN DISTINCT j.type
 ```
+
+![3](https://github.com/user-attachments/assets/ca42b111-7e40-4cb3-884d-90789a7b2f26)
 
 Let's put some indexes:
 ```
@@ -986,6 +997,8 @@ Let's put some indexes:
 CREATE INDEX FOR (s:Skill) ON (s.score);
 CREATE INDEX FOR (s:Skill) ON (s.level);
 ```
+
+![4](https://github.com/user-attachments/assets/fe68911c-01a4-465a-b7fa-60e8634c8f80)
 
 Let's try with some composite indexes
 ```
