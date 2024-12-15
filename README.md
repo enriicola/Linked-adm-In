@@ -23,12 +23,12 @@ Final project for the Advanced Data Mangaement course
     - [X] a. You can use either an already available dataset or a synthetic one but we encourage the first option (it might be difficult to synthetically generate a relevant dataset for your reference application). The dataset should have a reasonable size (few Mb).
     - [X] b. Notice that selected datasets might need to be transformed in order to be used by your application. For dataset transformation, you can rely on either data transformation tools, such as Tableaux Prep (www.tableau.com), Apache Superset (superset.apache.org) Trifacta ( www.trifacta.com ), or other ETL tools such as Talend ( www.talend.com ), or scripts in your favorite language.
     - [X] c. For importing datasets in the chosen system, you should refer to the available documentation for the system you have selected (e.g. https://www.datastax.com/dev/blog/simple-data-importing-and-exporting-with-cassandra for Cassandra and https://neo4j.com/developer/guide-importing-data-and-etl/perneo4J for Neo4J).
-- [ ] 13. Implement the workload in system S.
-- [ ] 14. Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3). In addition:
-    - [ ] a. For each property, specify the corresponding domain and range.
-    - [ ] b. Express which classes are equivalent and which ones are disjoint.
-    - [ ] c. Specify (or add) at least an inverse property.
-    - [ ] d. For all the modeled properties, specify whether they are functional (or inverse functional).
+- [X] 13. Implement the workload in system S.
+- [X] 14. Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3). In addition:
+    - [X] a. For each property, specify the corresponding domain and range.
+    - [X] b. Express which classes are equivalent and which ones are disjoint.
+    - [X] c. Specify (or add) at least an inverse property.
+    - [X] d. For all the modeled properties, specify whether they are functional (or inverse functional).
 - [ ] 15. Model in RDF some instances  to populate your schema. In addition:
     - [ ] a. Relate instances to the corresponding class or property.
     - [ ] b. Clarify which individuals are identical and which ones are different.
@@ -71,18 +71,17 @@ https://2024.aulaweb.unige.it/mod/page/view.php?id=56196
 The following conceptual schema captures key entities and their relationships:
 
     Nodes:
-        Job(Title, Expire date, Type): Represents a job posting (for now has a title attribute)
-        Company(Name, Country, City, ZipCode, MarketValue): Represents a company (for now has a name attribute)
+        Job(Title, Expire date, Type): Represents a specifc job posting
+        Company(Name, Country, City, ZipCode, MarketValue): Represents a company
         IndustryDomain(Name): Represents an industry domain 
         Skill(Name, Level, Score): Represents skills associated with a job
         Benefit(Type (PK), Economical Value): Represents benefits offered for a job
 
     Relationships:
-        BELONGS_TO: Links a job to an company (1-N: with an attribute "salary" of the association)
-        --> the key of Job will be the composite of title and the foreign key of company
-        REQUIRES: Links a job to the skills it demands (N-N)
-        OFFERS: Links a job to the benefits it provides (N-N)
-        OPERATES_IN: Links a company to the industries it operates in (1-N)
+        BELONGS_TO: Links a job to an company 
+        REQUIRES: Links a job to the skills it demands
+        OFFERS: Links a job to the benefits it provides
+        OPERATES_IN: Links a company to the industries it operates in
 
 ![Er1](https://github.com/user-attachments/assets/bb3e515b-c972-4ad3-827a-d7471e4cd96a)
 
@@ -739,6 +738,7 @@ So, in our previous example, as the number of users grows, we can step-by-step i
 ## (11) Neo4J: Schema details
 
 Given Neo4J schema-less nature we don't have to provide any schema details (like in Cassandra for example, where we would have needed some table specifications). Here we just need to dynamically create nodes and their relationships, as we'll do in the next step.
+For simplicity, Jobs will be considered as merely identified by their title.
 Nevertheless, here follows a basic **example** on how the nodes should appear in our database insertion:
 
 ```
@@ -1034,27 +1034,31 @@ Again, these indexes are not used due to the benefit.type unique index being alr
 ## (14) Model in RDFS / OWL the main classes and properties
 
 a. (Specify classes and properties) + for each property, specify the corresponding domain and range.
+
+For simplicity, Jobs will be considered as merely identified by their title.
+
 ```
 @prefix ex: <http://example.org/schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-# Classes
+# Classes:
+
 ex:Job a rdfs:Class .
 ex:Company a rdfs:Class .
 ex:IndustryDomain a rdfs:Class .
 ex:Skill a rdfs:Class .
 ex:Benefit a rdfs:Class .
 
-# Properties
+# (Subject to Object) Properties:
+
 ex:belongsTo a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Company .
 ex:requires a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Skill .
 ex:offers a rdf:Property ; rdfs:domain ex:Job ; rdfs:range ex:Benefit .
 ex:operatesIn a rdf:Property ; rdfs:domain ex:Company ; rdfs:range ex:IndustryDomain .
 
-
-# (Literal) Properties
+# (Subject to Literal) Properties
 
 # Job
 ex:jobTitle a rdf:Property ;
@@ -1119,10 +1123,139 @@ ex:economicalValue a rdf:Property ;
 ```
     
 b. Express which classes are equivalent and which ones are disjoint.
-    
+
+In RDFS and OWL the semantics expresses that:
+    - Open World Assumption The absence of a triple in a graph does not imply that the corresponding statement does not hold
+    - No Unique Name Assumption: differently named individuals can denote the same thing
+
+Given that, we can for example express that "Job" and "JobOffer" are indeed the same concept in our domain:
+```
+ex:JobOffer a owl:Class ;
+owl:equivalentClass ex:Job .
+```
+
+These are instead all disjoint specifications:
+```
+ex:Job owl:disjointWith ex:Company, ex:IndustryDomain, ex:Skill, ex:Benefit .
+ex:Company owl:disjointWith ex:IndustryDomain, ex:Skill, ex:Benefit .
+ex:IndustryDomain owl:disjointWith ex:Skill, ex:Benefit .
+ex:Skill owl:disjointWith ex:Benefit .
+```
+
 c. Specify (or add) at least an inverse property.
+
+Let's repeat once again all the (Subject to Object) properties in order to define their possible inverse relationships:
+```
+ex:belongsTo a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range ex:Company ;
+    owl:inverseOf ex:offersJob .
+
+ex:requires a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range ex:Skill ;
+    owl:inverseOf ex:isRequired .
+
+ex:offers a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range ex:Benefit ;
+    owl:inverseOf ex:isOffered .
+
+ex:operatesIn a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range ex:IndustryDomain ;
+    owl:inverseOf ex:hasCompany .
+```
     
 d. For all the modeled properties, specify whether they are functional (or inverse functional).
+
+- The only Class Property to be functional is belongsTo, because if a Job belongs to CompanyA and CompanyB that two Companies are indeed the same Company.
+- There are no Inverse Functional Class Properties
+- All the Literal Properties are functional (there aren't any entities that can have multiple literal values, e.g a single Job Offer can't have two different expire dates, therefore if a Job has two expire_dates they're indeed the same expire_date.
+- Only the PRIMARY KEY literals are also inverse functional (e.g if two Companies have the same name, the two Companies are indeed the same Company.
+
+```
+# Subject to Object Properties
+ex:belongsTo a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range ex:Company ;
+    a owl:FunctionalProperty .
+
+# Subject to Literal Properties - Job
+ex:jobTitle a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty, owl:InverseFunctionalProperty .
+
+ex:jobType a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty .
+
+ex:expireDate a rdf:Property ;
+    rdfs:domain ex:Job ;
+    rdfs:range xsd:date ;
+    a owl:FunctionalProperty .
+
+# Subject to Literal Properties - Company
+ex:companyName a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty, owl:InverseFunctionalProperty .
+
+ex:country a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty .
+
+ex:city a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty .
+
+ex:zipCode a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty .
+
+ex:marketValue a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range xsd:decimal ;
+    a owl:FunctionalProperty .
+
+# Attributes for IndustryDomain
+ex:industryName a rdf:Property ;
+    rdfs:domain ex:IndustryDomain ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty, owl:InverseFunctionalProperty .
+
+# Subject to Literal Properties - Skill
+ex:skillName a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty, owl:InverseFunctionalProperty .
+
+ex:skillLevel a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty .
+
+ex:skillScore a rdf:Property ;
+    rdfs:domain ex:Skill ;
+    rdfs:range xsd:decimal ;
+    a owl:FunctionalProperty .
+
+# Subject to Literal Properties - Benefit
+ex:benefitType a rdf:Property ;
+    rdfs:domain ex:Benefit ;
+    rdfs:range xsd:string ;
+    a owl:FunctionalProperty, owl:InverseFunctionalProperty .
+
+ex:economicalValue a rdf:Property ;
+    rdfs:domain ex:Benefit ;
+    rdfs:range xsd:decimal ;
+    a owl:FunctionalProperty .
+```
     
 # Presentation Link :)
 https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
