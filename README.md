@@ -1,5 +1,5 @@
 # Linked-adm-In
-Final project for the Advanced Data Mangaement course
+Final project for the Advanced Data Management course
 
 ### Assignment Steps:
 - [X] 1. Propose a domain you are interested in and a relevant application for it (e.g.,e-commerce domain, shopping cart and session data management application). Take inspirations from datasets available online (e.g., on https://www.kaggle.com).
