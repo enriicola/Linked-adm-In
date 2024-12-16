@@ -32,10 +32,10 @@ Final project for the Advanced Data Management course
 - [X] 15. Model in RDF some instances  to populate your schema. In addition:
     - [X] a. Relate instances to the corresponding class or property.
     - [X] b. Clarify which individuals are identical and which ones are different.
-- [ ] 16. Specify in SPARQL at least 3 queries to be executed over the defined RDF dataset. The requests should:
-    - [ ] a. be structurally different (i.e., each of them should contain different constructs)
-    - [ ] b. include at least one CONSTRUCT query
-    - [ ] c. refer as much as possible to the requests included in the workload specified in PART II.
+- [X] 16. Specify in SPARQL at least 3 queries to be executed over the defined RDF dataset. The requests should:
+    - [X] a. be structurally different (i.e., each of them should contain different constructs)
+    - [X] b. include at least one CONSTRUCT query
+    - [X] c. refer as much as possible to the requests included in the workload specified in PART II.
 - [ ] 17. Check the correctness of the proposed RDF dataset, extended with RDFS /OWL constraints, and of the proposed SPARQL queries using RDF playground (http://rdfplayground.dcc.uchile.cl/) or any other RDF data store at your choice.
 
 ### dataset link
@@ -1254,9 +1254,6 @@ ex:economicalValue a rdf:Property ;
     rdfs:range xsd:decimal ;
     a owl:FunctionalProperty .
 ```
-    
-# Presentation Link :)
-https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
 
 ## (15) Model RDF instances
 
@@ -1322,3 +1319,61 @@ ex:Pitch owl:differentFrom ex:SQL .
 ex:HI owl:differentFrom ex:TaxBenefit .
 ```
 
+## (16) SPARQL queries
+
+For the first query we refer to our Query #1 and we decide to translate it in SPARQL paying attention on how to filter the date attribute:
+```
+SELECT ?jobTitle
+WHERE {
+  ?job a ex:Job ;
+       ex:jobType "Full-time" ;
+       ex:expireDate ?expireDate ;
+       ex:jobTitle ?jobTitle .
+  FILTER (xsd:date(?expireDate) <= xsd:date(NOW()) + "P30D"^^xsd:duration)
+}
+```
+
+For the second query we refer to our Query #4 so that we can introduce the DISTINCT construct (differently from the previous query we're returning non-unique values):
+```
+SELECT DISTINCT ?jobType
+WHERE {
+  ?company ex:operatesIn ?industry ;
+           ex:belongsTo ?job .
+  ?industry a ex:IndustryDomain ;
+            ex:industryName "Technology" .
+  ?job ex:jobType ?jobType .
+}
+```
+
+For the third query we want to use (as the assignment requires) the CONSTRUCT keyword:
+    Construct a graph with all jobs that require skills with a level of Beginner.
+```
+CONSTRUCT {
+  ?job a ex:Job ;
+       ex:requires ?skill .
+}
+WHERE {
+  ?job a ex:Job ;
+       ex:requires ?skill .
+  ?skill ex:skillLevel "Beginner" .
+}
+```
+We note that this redundancy inside both CONSTRUCT and WHERE constructs is actually a feature of SPARQL, which allows the user to specify different conditions with respect to the final graph that will be indeed produced!
+
+We end with a fourth query to also cover the "ASK" construct:
+    Check if any job requires a skill with a level of Beginner.
+
+```
+ASK {
+  ?job a ex:Job ;
+       ex:requires ?skill .
+  ?skill ex:skillLevel "Beginner" .
+}
+```
+
+## (17) Let's try 14-16 content in RDF playground!
+
+<........>
+
+# Presentation Link :)
+https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
