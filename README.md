@@ -29,9 +29,9 @@ Final project for the Advanced Data Management course
     - [X] b. Express which classes are equivalent and which ones are disjoint.
     - [X] c. Specify (or add) at least an inverse property.
     - [X] d. For all the modeled properties, specify whether they are functional (or inverse functional).
-- [ ] 15. Model in RDF some instances  to populate your schema. In addition:
-    - [ ] a. Relate instances to the corresponding class or property.
-    - [ ] b. Clarify which individuals are identical and which ones are different.
+- [X] 15. Model in RDF some instances  to populate your schema. In addition:
+    - [X] a. Relate instances to the corresponding class or property.
+    - [X] b. Clarify which individuals are identical and which ones are different.
 - [ ] 16. Specify in SPARQL at least 3 queries to be executed over the defined RDF dataset. The requests should:
     - [ ] a. be structurally different (i.e., each of them should contain different constructs)
     - [ ] b. include at least one CONSTRUCT query
@@ -1257,3 +1257,68 @@ ex:economicalValue a rdf:Property ;
     
 # Presentation Link :)
 https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
+
+## (15) Model RDF instances
+
+```
+ex:SwEng a ex:Job ;
+    ex:jobTitle "Software Engineer" ;
+    ex:jobType "Full-time" ;
+    ex:expireDate "2025-02-15"^^xsd:date ;
+    ex:belongsTo ex:GueCorp ;
+    ex:requires ex:Pitch, ex:SQL ;
+    ex:offers ex:HI, ex:TaxBenefit .
+
+ex:GueCorp a ex:Company ;
+    ex:companyName "GuerriniCorp" ;
+    ex:country "Italy" ;
+    ex:city "Genoa" ;
+    ex:zipCode "16165" ;
+    ex:marketValue "80000000.00"^^xsd:decimal ;
+    ex:operatesIn ex:Creativity .
+
+ex:Creativity a ex:IndustryDomain ;
+    ex:industryName "Creativity" .
+
+ex:Pitch a ex:Skill ;
+    ex:skillName "Elevator Pitch" ;
+    ex:skillLevel "Intermediate" ;
+    ex:skillScore "85.0"^^xsd:decimal .
+
+ex:SQL a ex:Skill ;
+    ex:skillName "SQL" ;
+    ex:skillLevel "Advanced" ;
+    ex:skillScore "90.0"^^xsd:decimal .
+
+ex:HI a ex:Benefit ;
+    ex:benefitType "Health Insurance" ;
+    ex:economicalValue "5000.00"^^xsd:decimal .
+
+ex:TaxBenefit a ex:Benefit ;
+    ex:benefitType "401(k)" ;
+    ex:economicalValue "3000.00"^^xsd:decimal .
+```
+
+Let's now identify which instances are the same and which are different among each other.
+
+For example, if I were to add a "SoftwareEng" node, for the same reason of the "Paris-Parigi" example discussed in class, it has to be referred as being the same as SwEng!
+
+```
+ex:SoftwareEng a ex:Job ;
+    ex:jobTitle "Software Engineer" ;
+    ex:jobType "Full-time" ;
+    ex:expireDate "2025-02-15"^^xsd:date ;
+    ex:belongsTo ex:GueCorp ;
+    ex:requires ex:Pitch, ex:SQL ;
+    ex:offers ex:HI, ex:TaxBenefit .
+
+ex:SwEng owl:sameAs ex:SoftwareEng .
+```
+
+Regarding the "differentFrom" constraint, since we have already defined that our classes are distinct from each other using the "disjointWith" constraint, this information is implicitly inferred. Therefore, we only need to specify that nodes within the same class are distinct from one another:
+
+```
+ex:Pitch owl:differentFrom ex:SQL .
+ex:HI owl:differentFrom ex:TaxBenefit .
+```
+
