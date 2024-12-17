@@ -120,22 +120,24 @@ The following conceptual schema captures key entities and their relationships:
 {
     <ins>name</ins>, marketValue, country, city,
     job_offers: [{job: {type}}],
-    industryName <!-- simple attribute because it comes from a (1,1) association -->
+    industryName
 }
 
 ### IndustryDomain: <!-- Q4 -->
 {
     <ins>name</ins>,
-    operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
+    operated: [{ company: [{ job: {type} }] }]
 }
+
+Note: dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs
 
 ### Skill: <!-- Q6 -->
 {
     <ins>name</ins>,score,
-    provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
+    provides: [{benefit: {type}}] 
 }
 
-### Note: inspect .md to see comments
+Note: double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs
 
 ## (6) Design in MongoDB 
 
