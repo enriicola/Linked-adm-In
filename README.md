@@ -1346,7 +1346,8 @@ WHERE {
 ```
 
 For the third query we want to use (as the assignment requires) the CONSTRUCT keyword:
-    Construct a graph with all jobs that require skills with a level of Beginner.
+
+Construct a graph with all jobs that require skills with a level of Beginner.
 ```
 CONSTRUCT {
   ?job a ex:Job ;
@@ -1361,7 +1362,8 @@ WHERE {
 We note that this redundancy inside both CONSTRUCT and WHERE constructs is actually a feature of SPARQL, which allows the user to specify different conditions with respect to the final graph that will be indeed produced!
 
 For a fourth query we try to specify a query that involves both OPTIONAL and UNION clauses:
-    Retrieve jobs with their associated skills, if available, where jobs either belong to companies in Italy OR operate in the Technology industry.
+
+Retrieve jobs with their associated skills, if available, where jobs either belong to companies in Italy OR operate in the Technology industry.
 ```
 SELECT ?jobTitle ?skillName
 WHERE {
@@ -1390,7 +1392,8 @@ WHERE {
 ```
 
 We end with a fifth query to also cover the "ASK" construct:
-    Check if any job requires a skill with a level of Beginner.
+
+Check if any job requires a skill with a level of Beginner.
 
 ```
 ASK {
