@@ -183,6 +183,8 @@ db.adminCommand({
   db.skills.find({score: {$gt: 70}, "provides.benefit.type": "401(k)"}, {name: 1, _id: 0});
 ```
 
+Note: Remembering that there's no such a thing as "CREATE TABLE" in MongoDB we avoid reporting here insert commands of example data for the collection.
+
 ### Queries associated with IndustryDomain: Q4
 Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 
