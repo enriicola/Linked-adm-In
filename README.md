@@ -142,10 +142,19 @@ The following conceptual schema captures key entities and their relationships:
 ### Queries associated with Skill: Q6
 Selection attributes for Q6: {score, type} <!-- benefit type -->
 
+The aggregate will remain the same...
+
+Skill: <!-- Q6 -->
+{
+    <ins>name</ins>,score,
+    provides: [{benefit: {type}}]
+
+Then MondoDB will add the _id:
+
 Skill: <!-- Q6 -->
 {
     _id, <ins>name</ins>,score,
-    provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
+    provides: [{benefit: {type}}]
 }
 
 - A non-unique index on the partition key with Partition key = {score, type}
@@ -173,6 +182,16 @@ db.adminCommand({
 
 ### Queries associated with IndustryDomain: Q4
 Selection attributes for Q4: {name} <!-- IndustryDomain name -->
+
+The aggregate will remain the same...
+
+### IndustryDomain: <!-- Q4 -->
+{
+    <ins>name</ins>,
+    operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
+}
+
+Then MongoDB will add the _id:
 
 ### IndustryDomain: <!-- Q4 -->
 {
@@ -235,6 +254,17 @@ db.adminCommand({
 Selection attributes for Q2: {city, mv}
 
 Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
+
+The aggregate will remain the same...
+
+### Company: <!-- Q2, Q5 -->
+{
+    <ins>name</ins>, marketValue, country, city,
+    job_offers: [{job: {type}}],
+    industryName <!-- simple attribute because it comes from a (1,1) association -->
+}
+
+Then MongoDB will add the _id:
 
 ### Company: <!-- Q2, Q5 -->
 {
@@ -310,6 +340,16 @@ Selection attributes for Q1: {type, expire_date}
 Selection attributes for Q3: {country, expire_date}
 
 Selection attributes for Q7: {type, city, level}
+
+The aggregate will remain the same...
+
+### JobOffer: <!-- Q1, Q3, Q7 -->
+{
+    <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
+    requires: [{skill: {level}}]
+}
+
+Then MongoDB will add the _id:
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
 {
