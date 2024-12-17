@@ -161,6 +161,8 @@ Then MongoDB will add the _id:
       db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
 ```
 - A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
+
+Note: We know that MongoDB creates the index for the shardKey for you, but we're willing to be explicit in each step for clarity.
 ```
 db.skills.createIndex(
           { score: 1, "provides.benefit.type": 1, name: 1 },
