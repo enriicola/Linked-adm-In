@@ -1450,7 +1450,7 @@ ASK {
 We "played" into the "play"ground and verified the correctness of all classes, properties, constraints and SPARQL queries.
 For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: --> link
 
---> image of the graph
+![SPARQL-graph](https://github.com/user-attachments/assets/0d5a7ed7-f37c-46df-b53c-b029cbcd0164)
 
 Here are, for reference, results of the queries for the above dataset:
 
