@@ -36,7 +36,7 @@ Final project for the Advanced Data Management course
     - [X] a. be structurally different (i.e., each of them should contain different constructs)
     - [X] b. include at least one CONSTRUCT query
     - [X] c. refer as much as possible to the requests included in the workload specified in PART II.
-- [ ] 17. Check the correctness of the proposed RDF dataset, extended with RDFS /OWL constraints, and of the proposed SPARQL queries using RDF playground (http://rdfplayground.dcc.uchile.cl/) or any other RDF data store at your choice.
+- [X] 17. Check the correctness of the proposed RDF dataset, extended with RDFS /OWL constraints, and of the proposed SPARQL queries using RDF playground (http://rdfplayground.dcc.uchile.cl/) or any other RDF data store at your choice.
 
 ### dataset link
 https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
@@ -1447,7 +1447,10 @@ ASK {
 
 ## (17) Let's try 14-16 content in RDF playground!
 
-<........>
+We "played" into the "play"ground and verified the correctness of all classes, properties, constraints and SPARQL queries.
+For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: <<link>>
+
+<<image of the graph>>
 
 # Presentation Link :)
 https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
