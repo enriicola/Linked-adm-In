@@ -149,7 +149,7 @@ The aggregate will remain the same...
     <ins>name</ins>,score,
     provides: [{benefit: {type}}]
 
-Then MondoDB will add the _id:
+Then MongoDB will add the _id:
 
 {
     _id, <ins>name</ins>,score,
@@ -348,7 +348,6 @@ The aggregate will remain the same...
 
 Then MongoDB will add the _id:
 
-### JobOffer: <!-- Q1, Q3, Q7 -->
 {
     _id, <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
