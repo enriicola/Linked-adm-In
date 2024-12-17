@@ -1448,7 +1448,7 @@ ASK {
 ## (17) Let's try 14-16 content in RDF playground!
 
 We "played" into the "play"ground and verified the correctness of all classes, properties, constraints and SPARQL queries.
-For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: [--> link](https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/SPARQL-data-and-queries.ttl)
+For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: (https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/SPARQL-data-and-queries.ttl)
 
 ![SPARQL-graph](https://github.com/user-attachments/assets/0d5a7ed7-f37c-46df-b53c-b029cbcd0164)
 
