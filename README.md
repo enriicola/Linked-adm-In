@@ -1448,14 +1448,51 @@ ASK {
 ## (17) Let's try 14-16 content in RDF playground!
 
 We "played" into the "play"ground and verified the correctness of all classes, properties, constraints and SPARQL queries.
-For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: --> link
+For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: [--> link](https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/SPARQL-data-and-queries.ttl)
 
 ![SPARQL-graph](https://github.com/user-attachments/assets/0d5a7ed7-f37c-46df-b53c-b029cbcd0164)
 
-Here are, for reference, results of the queries for the above dataset:
+Below, for reference, there are results of the queries for the above dataset:
 
 ```
---> queries
+# --- 1 ---
+--------------------
+| jobTitle         |
+====================
+| "Data Scientist" |
+--------------------
+
+# --- 2 ---
+-----------
+| jobType |
+===========
+-----------
+
+# --- 3 ---
+(graph
+  (triple ex:InternDev ex:requires ex:HTML)
+  (triple ex:InternDev ex:requires ex:CSS)
+  (triple ex:InternDev rdf:type ex:Job)
+)
+
+# --- 4 ---
+------------------------------------------
+| jobTitle            | skillName        |
+==========================================
+| "Developer Intern"  | "CSS"            |
+| "Developer Intern"  | "HTML"           |
+| "Software Engineer" | "SQL"            |
+| "Software Engineer" | "Elevator Pitch" |
+| "Software Engineer" | "Elevator Pitch" |
+| "Software Engineer" | "SQL"            |
+| "Developer Intern"  | "CSS"            |
+| "Developer Intern"  | "HTML"           |
+| "Data Scientist"    | "SQL"            |
+| "Data Scientist"    | "Python"         |
+------------------------------------------
+
+# --- 5 ---
+yes
 ```
 
 # Presentation Link :)
