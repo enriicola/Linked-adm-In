@@ -144,7 +144,7 @@ Selection attributes for Q6: {score, type} <!-- benefit type -->
 
 Skill: <!-- Q6 -->
 {
-    <ins>name</ins>,score,
+    _id, <ins>name</ins>,score,
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
 
@@ -176,7 +176,7 @@ Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 
 ### IndustryDomain: <!-- Q4 -->
 {
-    <ins>name</ins>,
+    _id, <ins>name</ins>,
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
 }
 
@@ -238,7 +238,7 @@ Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name --
 
 ### Company: <!-- Q2, Q5 -->
 {
-    <ins>name</ins>, marketValue, country, city,
+    _id, <ins>name</ins>, marketValue, country, city,
     job_offers: [{job: {type}}],
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
@@ -313,7 +313,7 @@ Selection attributes for Q7: {type, city, level}
 
 ### JobOffer: <!-- Q1, Q3, Q7 -->
 {
-    <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
+    _id, <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
 }
 
