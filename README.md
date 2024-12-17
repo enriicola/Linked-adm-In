@@ -144,14 +144,13 @@ Selection attributes for Q6: {score, type} <!-- benefit type -->
 
 The aggregate will remain the same...
 
-Skill: <!-- Q6 -->
+### Skill: <!-- Q6 -->
 {
     <ins>name</ins>,score,
     provides: [{benefit: {type}}]
 
 Then MondoDB will add the _id:
 
-Skill: <!-- Q6 -->
 {
     _id, <ins>name</ins>,score,
     provides: [{benefit: {type}}]
@@ -193,7 +192,6 @@ The aggregate will remain the same...
 
 Then MongoDB will add the _id:
 
-### IndustryDomain: <!-- Q4 -->
 {
     _id, <ins>name</ins>,
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
@@ -266,7 +264,6 @@ The aggregate will remain the same...
 
 Then MongoDB will add the _id:
 
-### Company: <!-- Q2, Q5 -->
 {
     _id, <ins>name</ins>, marketValue, country, city,
     job_offers: [{job: {type}}],
