@@ -1360,7 +1360,36 @@ WHERE {
 ```
 We note that this redundancy inside both CONSTRUCT and WHERE constructs is actually a feature of SPARQL, which allows the user to specify different conditions with respect to the final graph that will be indeed produced!
 
-We end with a fourth query to also cover the "ASK" construct:
+For a fourth query we try to specify a query that involves both OPTIONAL and UNION clauses:
+    Retrieve jobs with their associated skills, if available, where jobs either belong to companies in Italy OR operate in the Technology industry.
+```
+SELECT ?jobTitle ?skillName
+WHERE {
+  {
+    {
+      ?job a ex:Job ;
+           ex:belongsTo ?company ;
+           ex:jobTitle ?jobTitle .
+      ?company ex:country "Italy" .
+    }
+    UNION
+    {
+      ?job a ex:Job ;
+           ex:belongsTo ?company ;
+           ex:jobTitle ?jobTitle .
+      ?company ex:operatesIn ?industry .
+      ?industry ex:industryName "Technology" .
+    }
+  }
+  
+  OPTIONAL {
+    ?job ex:requires ?skill .
+    ?skill ex:skillName ?skillName .
+  }
+}
+```
+
+We end with a fifth query to also cover the "ASK" construct:
     Check if any job requires a skill with a level of Beginner.
 
 ```
