@@ -1448,9 +1448,15 @@ ASK {
 ## (17) Let's try 14-16 content in RDF playground!
 
 We "played" into the "play"ground and verified the correctness of all classes, properties, constraints and SPARQL queries.
-For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: <<link>>
+For obtaining a more meaningful and enriched graph we also added some other instances. You can find the whole dataset at this link: --> link
 
-<<image of the graph>>
+--> image of the graph
+
+Here are, for reference, results of the queries for the above dataset:
+
+```
+--> queries
+```
 
 # Presentation Link :)
 https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
