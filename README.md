@@ -77,7 +77,7 @@ The following conceptual schema captures key entities and their relationships:
         Company(Name, Country, City, ZipCode, MarketValue): Represents a company
         IndustryDomain(Name): Represents an industry domain 
         Skill(Name, Level, Score): Represents skills associated with a job
-        Benefit(Type (PK), Economical Value): Represents benefits offered for a job
+        Benefit(Type, Economical Value): Represents benefits offered for a job
 
     Relationships:
         BELONGS_TO: Links a job to an company 
