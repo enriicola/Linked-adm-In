@@ -1210,10 +1210,18 @@ ex:operatesIn a rdf:Property ;
     rdfs:range ex:IndustryDomain ;
     owl:inverseOf ex:hasCompany .
 ```
+
+For example we can have:
+```
+ex:offersJob a rdf:Property ;
+    rdfs:domain ex:Company ;
+    rdfs:range ex:Job ;
+    owl:inverseOf ex:belongsTo .
+```
     
 d. For all the modeled properties, specify whether they are functional (or inverse functional).
 
-- The only Class Property to be functional is belongsTo, because if a Job belongs to CompanyA and CompanyB that two Companies are indeed the same Company.
+- The only Class Property to be functional is belongsTo, because if a Job belongs to CompanyA and CompanyB; these two Companies are indeed the same Company.
 - There are no Inverse Functional Class Properties
 - All the Literal Properties are functional (there aren't any entities that can have multiple literal values, e.g a single Job Offer can't have two different expire dates, therefore if a Job has two expire_dates they're indeed the same expire_date.
 - Only the PRIMARY KEY literals are also inverse functional (e.g if two Companies have the same name, the two Companies are indeed the same Company.
