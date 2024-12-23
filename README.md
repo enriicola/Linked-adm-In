@@ -834,7 +834,7 @@ These are our Cypher scripts:
 :param {
   // Define the file path root and the individual file names required for loading.
   // https://neo4j.com/docs/operations-manual/current/configuration/file-locations/
-  file_path_root: '[file:///](https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/)', // Change this to the folder your script can access the files at.
+  file_path_root: '[file:///](https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/)',
   file_0: 'benefit.csv',
   file_1: 'company.csv',
   file_2: 'job.csv',
