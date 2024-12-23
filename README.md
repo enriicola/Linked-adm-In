@@ -756,7 +756,9 @@ causal_clustering.enabled=true
 causal_clustering.minimum_core_cluster_size_at_runtime=3
 ```
         
-Then, when deploying Neo4j for a read-intensive workload with high availability and potential fault tolerance, the "R + W > N" rule becomes crucial: R (# of replicas that respond to read requests) and W (# of core nodes required for a successful write) must exceed the total number of N (core nodes in the cluster). Keeping in mind that in Neo4J each write operation is replicated across core nodes to keep consistency we have to carefully choose values for N, W and N.
+Then, when deploying Neo4j for a read-intensive workload with high availability and potential fault tolerance, the "R + W > N" rule becomes crucial: R (# of replicas that respond to read requests) and W (# of core nodes required for a successful write) must exceed the total number of N (core nodes in the cluster). 
+
+Keeping in mind that in Neo4J each write operation is replicated across core nodes to keep consistency we have to carefully choose values for R, W and N.
 
 - As said before N = 3 (so with a fault tolerance of 1 node failure and therefore a minimum quorum of 2 nodes)
 - We can set W = 2 (at minimum 2 nodes have to commit a write for it being successfull)
