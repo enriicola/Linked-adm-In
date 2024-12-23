@@ -1168,7 +1168,7 @@ b. Express which classes are equivalent and which ones are disjoint.
 
 In RDFS and OWL the semantics expresses that:
 
-- Open World Assumption The absence of a triple in a graph does not imply that the corresponding statement does not hold
+- Open World Assumption: The absence of a triple in a graph does not imply that the corresponding statement does not hold
     
 - No Unique Name Assumption: differently named individuals can denote the same thing
 
