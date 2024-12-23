@@ -1366,7 +1366,7 @@ ex:SoftwareEng a ex:Job ;
 ex:SwEng owl:sameAs ex:SoftwareEng .
 ```
 
-Regarding the "differentFrom" constraint, since we have already defined that our classes are distinct from each other using the "disjointWith" constraint, this information is implicitly inferred. Therefore, we only need to specify that nodes within the same class are distinct from one another:
+--> Regarding the "differentFrom" constraint, since we have already defined that our classes are distinct from each other using the "disjointWith" constraint, this information is implicitly inferred. Therefore, we only need to specify that nodes within the same class are distinct from one another:
 
 ```
 ex:Pitch owl:differentFrom ex:SQL .
