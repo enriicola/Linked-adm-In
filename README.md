@@ -605,7 +605,7 @@ Selection attributes for Q7: {type, city, level}
     requires: [{skill: {level}}]
 }
 
-- Given our partial overlap we are able to carefully design this solution. Here are two candidate pairings:
+- Given our partial overlap we can think to carefully design this solution. Here are two candidate pairings:
     - Option 1: Combine Q1 and Q3
         Shared attribute: expire_date.
         Partitioning by expire_date allows efficient filtering for both queries.
@@ -614,7 +614,10 @@ Selection attributes for Q7: {type, city, level}
         Shared attribute: type.
         Partitioning by type allows efficient filtering for both queries.
   
---> We decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter).
+We could decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter).
+
+--> We'll see later on that this approach brings some problems!
+
 ```
 CREATE TYPE skill_t (
     level text
@@ -675,6 +678,25 @@ FROM Job7
 WHERE type = 'Internship' 
   AND city = 'Hamburg' 
   AND level = 'Beginner';
+```
+
+Unfortunately, we see that based on Job1_3 we can't execute Q1 and Q3 without either creating secondary indexes or by ALLOW FILTERING. So we opt to further divide the two tables:
+```
+CREATE TABLE Job1 (
+    expire_date DATE,
+    type text,
+    title text,
+    companyName text,
+    PRIMARY KEY (type, expire_date, title, companyName)
+);
+
+CREATE TABLE Job3 (
+    expire_date DATE,
+    country text,
+    title text,
+    companyName text,
+    PRIMARY KEY (country, expire_date, title, companyName)
+);
 ```
 
 ## (8) Design in Neo4J
