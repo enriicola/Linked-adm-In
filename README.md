@@ -525,7 +525,7 @@ Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name --
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
-- Unlikely the intersection between Q2 and Q5 selection attributes is empty: The only solution is to split the aggregate into two column-families!
+- Unluckily, the intersection between Q2 and Q5 selection attributes is empty: the only solution is to split the aggregate into two column-families!
 ```
 CREATE TYPE job_t (
     type text
