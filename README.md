@@ -452,7 +452,7 @@ Skill: <!-- Q6 -->
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
 
-- Given that we have only one query we can safely select {score} as partition key, while for the primary key we have to add the aggregate key "name" in order to have the aggregate identifier. We obtain:
+- Given that we only have one query, we can safely select {score} as partition key, while for the primary key we have to add the aggregate key "name" in order to have the aggregate identifier. We obtain:
     - Partition key = {score}
     - Primary key = {score, name} with name as clustering column
   
