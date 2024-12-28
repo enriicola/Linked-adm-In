@@ -482,7 +482,7 @@ WHERE score = 71 AND provides CONTAINS '401(k)';
 ### Queries associated with IndustryDomain: Q4
 Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 
-### IndustryDomain: <!-- Q4 -->
+IndustryDomain: <!-- Q4 -->
 {
     <ins>name</ins>,
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
@@ -518,7 +518,7 @@ Selection attributes for Q2: {city, mv}
 
 Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
 
-### Company: <!-- Q2, Q5 -->
+Company: <!-- Q2, Q5 -->
 {
     <ins>name</ins>, marketValue, country, city,
     job_offers: [{job: {type}}],
@@ -556,10 +556,10 @@ Company2 will be used for executing Q2 and Company5 for executing Q5.
 A further analysis can lead us to optimize, for example, C5 table by removing unnecessary fields (we still have C2 for other fields if required, so no needs to include extra field on a table that should be mainly tailored to allow the execution of query 5.
 ```
 CREATE TABLE Company5 (
-    country TEXT,
-    industryName TEXT,
-    name TEXT,
-    job_offers LIST<FROZEN<job_t>>,
+    country text,
+    industryName text,
+    name text,
+    job_offers list<frozen<job_t>>,
     PRIMARY KEY ((country, industryName), name)
 );
 ```
@@ -584,7 +584,7 @@ Selection attributes for Q3: {country, expire_date}
 
 Selection attributes for Q7: {type, city, level}
 
-### JobOffer: <!-- Q1, Q3, Q7 -->
+JobOffer: <!-- Q1, Q3, Q7 -->
 {
     <ins>title, companyName</ins>, expire_date, type, country, city, marketValue,
     requires: [{skill: {level}}]
@@ -592,16 +592,14 @@ Selection attributes for Q7: {type, city, level}
 
 - Given our partial overlap we can think to carefully design this solution. Here are two candidate pairings:
     - Option 1: Combine Q1 and Q3
-        Shared attribute: expire_date.
-        Partitioning by expire_date allows efficient filtering for both queries.
+        - Shared attribute: expire_date.
+        - Partitioning by expire_date allows efficient filtering for both queries.
 
     - Option 2: Combine Q1 and Q7
-        Shared attribute: type.
-        Partitioning by type allows efficient filtering for both queries.
+        - Shared attribute: type.
+        - Partitioning by type allows efficient filtering for both queries.
   
-We could decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter).
-
---> We'll see later on that this approach brings some problems!
+We could decide to opt for mixing Q1 and Q3 because expire_date is time-based and therefore with high selection factor (we have less types then expire_dates so makes sense to group the latter) --> We'll see later on that this approach brings some problems!
 
 Also, as seen before, we opt for a list<text> to allow the INDEX creation for Q7's level selection.
 
@@ -634,9 +632,9 @@ CREATE INDEX ON Job7 (requires);
 ```
 
 A further analysis can lead us to optimize tables by removing unnecessary fields.
-Also, unfortunately, we see that based on Job1_3 we can't execute Q1 and Q3 without either creating secondary indexes or by ALLOW FILTERING. So we opt to further divide the two tables:
-```
+Also, unfortunately, we see that based on Job1_3 we can't execute Q1 and Q3 without either creating secondary indexes or by ALLOW FILTERING (e.g expire_date is a range selection and therefore has to appear as the last). So we opt to further divide the two tables:
 
+```
 CREATE TABLE Job1 (
     expire_date DATE,
     type text,
@@ -649,6 +647,7 @@ CREATE TABLE Job3 (
     expire_date DATE,
     country text,
     title text,
+    marketValue double,
     companyName text,
     PRIMARY KEY (country, expire_date, title, companyName)
 );
