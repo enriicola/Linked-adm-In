@@ -452,39 +452,36 @@ Skill: <!-- Q6 -->
     provides: [{benefit: {type}}] <!-- double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs -->
 }
 
-- Given that we have only one query we can safely select {score, type} as partition key, while for the primary key we have to add the aggregate key "name" in order to have the aggregate identifier. We obtain:
-    - Partition key = {score, type}
-    - Primary key = {score, key, name} with name as clustering column
-- Here are the CREATE commands in Cassandra:
-```
-  CREATE TYPE benefit_t (
-    type text
-);
+- Given that we have only one query we can safely select {score} as partition key, while for the primary key we have to add the aggregate key "name" in order to have the aggregate identifier. We obtain:
+    - Partition key = {score}
+    - Primary key = {score, name} with name as clustering column
+  
+However, we have still purposely ignored the selection on benefit type!
 
+--> As an important note, we can't create a custom type because this would enforce the set to be frozen and therefore disallowing us to create an INDEX on provides.
+
+- Here is the CREATE command in Cassandra:
+```
 CREATE TABLE Skills (
     name text,
     score int,
-    type text,
-    provides set<frozen<benefit_t>>,
-    PRIMARY KEY ((score, type), name)
+    provides set<text>,
+    PRIMARY KEY (score, name)
 );
 
+CREATE INDEX ON Skills (provides);
 ```
 In summary:
 
-TYPE benefit_t defines the structure for benefits for semantic reasons
+- score as partition key ensures data is grouped by score
 
-((score, type)) as partition key ensures data is grouped by score and type
-
-name as clustering column differentiates entries within each (score, type) partition
-
-provides represents the benefits associated with a skill as a set of the previously created frozen benefit_t
+- name as clustering column differentiates entries within each score partition
 
 - Q6:
 ```
 SELECT name
 FROM Skills
-WHERE score > 70 AND type = '401(k)';
+WHERE score = 71 AND provides CONTAINS '401(k)';
 ```
 
 ### Queries associated with IndustryDomain: Q4
@@ -618,11 +615,9 @@ We could decide to opt for mixing Q1 and Q3 because expire_date is time-based an
 
 --> We'll see later on that this approach brings some problems!
 
-```
-CREATE TYPE skill_t (
-    level text
-);
+Also, as seen before, we opt for a list<text> to allow the INDEX creation for Q7's level selection.
 
+```
 CREATE TABLE Job1_3 (
     expire_date DATE,
     type text,
@@ -631,7 +626,7 @@ CREATE TABLE Job1_3 (
     companyName text,
     city text,
     marketValue double,
-    requires list<frozen<skill_t>>,
+    requires list<text>,
     PRIMARY KEY (expire_date, type, country, title, companyName)
 );
 
@@ -643,45 +638,17 @@ CREATE TABLE Job7 (
     companyName text,
     city text,
     marketValue double,
-    requires list<frozen<skill_t>>,
-    PRIMARY KEY ((type, city, level), title, companyName)
+    requires list<text>,
+    PRIMARY KEY ((type, city), title, companyName)
 );
-```
-A further analysis can lead us to optimize, for example, Job7 table by removing unnecessary fields (we still have Job1_3 for other fields if required, so no needs to include extra field on a table that should be mainly tailored to allow the execution of query 7.
-```
-CREATE TABLE Job7 (
-    type text,
-    city text,
-    level text,
-    title text,
-    companyName text,
-    PRIMARY KEY ((type, city, level), title, companyName)
-);
+
+CREATE INDEX ON Job7 (requires);
 ```
 
-- Q1:
-```
-SELECT * 
-FROM Job1_3 
-WHERE type = 'Full-time' AND expire_date <= toDate(now()) + 30;
-```
-- Q3:
-```
-SELECT companyName, marketValue 
-FROM Job1_3 
-WHERE country = 'Russia' AND expire_date > toDate(now()) + 60;
-```
-- Q7:
-```
-SELECT title 
-FROM Job7 
-WHERE type = 'Internship' 
-  AND city = 'Hamburg' 
-  AND level = 'Beginner';
+A further analysis can lead us to optimize tables by removing unnecessary fields.
+Also, unfortunately, we see that based on Job1_3 we can't execute Q1 and Q3 without either creating secondary indexes or by ALLOW FILTERING. So we opt to further divide the two tables:
 ```
 
-Unfortunately, we see that based on Job1_3 we can't execute Q1 and Q3 without either creating secondary indexes or by ALLOW FILTERING. So we opt to further divide the two tables:
-```
 CREATE TABLE Job1 (
     expire_date DATE,
     type text,
@@ -697,6 +664,38 @@ CREATE TABLE Job3 (
     companyName text,
     PRIMARY KEY (country, expire_date, title, companyName)
 );
+
+CREATE TABLE Job7 (
+    type text,
+    city text,
+    title text,
+    companyName text,
+    requires list<text>,
+    PRIMARY KEY ((type, city), title, companyName)
+);
+
+CREATE INDEX ON Job7 (requires);
+```
+
+- Q1:
+```
+SELECT * 
+FROM Job1 
+WHERE type = 'Full-time' AND expire_date <= toDate(now()) + 30;
+```
+- Q3:
+```
+SELECT companyName, marketValue 
+FROM Job3 
+WHERE country = 'Russia' AND expire_date > toDate(now()) + 60;
+```
+- Q7:
+```
+SELECT title 
+FROM Job7 
+WHERE type = 'Internship' 
+  AND city = 'Hamburg' 
+  AND requires CONTAINS 'Beginner';
 ```
 
 ## (8) Design in Neo4J
