@@ -471,11 +471,6 @@ CREATE TABLE Skills (
 
 CREATE INDEX ON Skills (provides);
 ```
-In summary:
-
-- score as partition key ensures data is grouped by score
-
-- name as clustering column differentiates entries within each score partition
 
 - Q6:
 ```
@@ -510,13 +505,6 @@ CREATE TABLE IndustryDomain (
     operated list<frozen<company_t>>
 );
 ```
-In summary:
-
-TYPE job_t represents the type of jobs associated with a company
-
-TYPE company_t represents a company, with its associated job types encapsulated as a list of job_t
-
-IndustryDomain uses name as the Partition Key & the operated field stores the hierarchical relationship of companies and jobs.
 
 - Q4:
 ```
