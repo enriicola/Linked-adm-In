@@ -162,7 +162,7 @@ Then MongoDB will add the _id:
     provides: [{benefit: {type}}]
 }
 
-- **About index**: We have to support the shard key via an index, either with full or compound index with the shard key as a prefix. Then, for enforcing uniqueness we would also need a unique index on the shard key itself (otherwise the uniqueness constraint across shards can't be enforced). Nevertheless, we opt to put a index which contains the full shard key as a prefix of the index = {score, type} and avoid enforcing uniqueness across partitions. 
+**About indexes**: We have to support the shard key via an index, either with full or compound index with the shard key as a prefix. Then, for enforcing uniqueness we would also need a unique index on the shard key itself (otherwise the uniqueness constraint across shards can't be enforced). Nevertheless, we opt to put a index which contains the full shard key as a prefix of the index = {score, type} and avoid enforcing uniqueness across partitions. 
 ```
 db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
 ```
@@ -199,6 +199,7 @@ Then MongoDB will add the _id:
     operated: [{ company: [{ job: {type} }] }] <!-- dobule n-n relationship kept as list[lists] to semanthically keep the companies for further needs-->
 }
 
+**About indexes**:
 - A unique index on the partition key, which is also the aggregate key = {name}
 ```
   db.industryDomains.createIndex({ name: 1 }, { unique: true });
@@ -272,6 +273,7 @@ Then MongoDB will add the _id:
     industryName <!-- simple attribute because it comes from a (1,1) association -->
 }
 
+**About indexes**: 
 - Given that the intersection between selection attributes in Q2 and Q5 is empty: instead of having a single non-unique index on {city, mv, country, industryName} we choose to separetely support both queries by creating two separate non-unique indexes onto them:
 ```
     db.companies.createIndex({ city: 1, mv: 1 });
@@ -355,6 +357,7 @@ Then MongoDB will add the _id:
     requires: [{skill: {level}}]
 }
 
+**About indexes**: 
 - We observe that type appears in both Q1 and Q7 while expire_date in both Q1 and Q3: so we have an empty intersection but a partial overlap that can be leveraged to support multiple queries efficiently.
 Consequently, we can think about:
     - A composite index on {type, expire_date, city, level}: mongo uses a prefix for filtering so this will support both Q1 and Q7
