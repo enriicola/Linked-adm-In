@@ -283,7 +283,7 @@ Then, after having thought about both queries, we create a mixed unique index fo
 ```
     db.companies.createIndex({ city: 1, country: 1 },{ unique: true });
 ```
-- A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
+- A compound-unique index which contains the full shard key as a prefix of the index:
 ```
     db.companies.createIndex(
       { city: 1, country: 1, name: 1 },
