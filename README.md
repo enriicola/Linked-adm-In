@@ -162,7 +162,7 @@ Then MongoDB will add the _id:
     provides: [{benefit: {type}}]
 }
 
-**About indexes**: We have to support the shard key via an index, either with full or compound index with the shard key as a prefix. Then, for enforcing uniqueness we would also need a unique index on the shard key itself (otherwise the uniqueness constraint across shards can't be enforced). Nevertheless, we opt to put a index which contains the full shard key as a prefix of the index = {score, type} and avoid enforcing uniqueness across partitions. 
+**About indexes**: We have to support the shard key via an index, either with full or compound index with the shard key as a prefix. Then, for enforcing uniqueness we would also need a unique index on the shard key itself (otherwise the uniqueness constraint across shards can't be enforced). Nevertheless, we opt to put a index which contains the full shard key as a prefix of the index = {score, type} and avoid enforcing uniqueness across partitions (we don't consider the skill name to be so crucial to be actually unique across shards).
 ```
 db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
 ```
