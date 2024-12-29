@@ -162,19 +162,11 @@ Then MongoDB will add the _id:
     provides: [{benefit: {type}}]
 }
 
-- A non-unique index on the partition key with Partition key = {score, type}
+- **About index**: We have to support the shard key via an index, either with full or compound index with the shard key as a prefix. Then, for enforcing uniqueness we would also need a unique index on the shard key itself (otherwise the uniqueness constraint across shards can't be enforced). Nevertheless, we opt to put a index which contains the full shard key as a prefix of the index = {score, type} and avoid enforcing uniqueness across partitions. 
 ```
-      db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
+db.skills.createIndex({ score: 1, "provides.benefit.type": 1 });
 ```
-- A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
 
-Note: We know that MongoDB creates the index for the shardKey for you, but we're willing to be explicit in each step for clarity.
-```
-db.skills.createIndex(
-          { score: 1, "provides.benefit.type": 1, name: 1 },
-          { unique: true }
-  );
-```
 - Shard collection
 ```
 db.adminCommand({
@@ -285,9 +277,9 @@ Then MongoDB will add the _id:
     db.companies.createIndex({ city: 1, mv: 1 });
     db.companies.createIndex({ country: 1, industryName: 1 });
 ```
-Then, after having thought about both queries, we create a mixed non-unique index for sharding and to then support the uniqueness of name with a compound index:
+Then, after having thought about both queries, we create a mixed unique index for sharding and to then support the uniqueness of name with a compound index. This index has to be unique to support uniqueness across all shards.
 ```
-    db.companies.createIndex({ city: 1, country: 1 });
+    db.companies.createIndex({ city: 1, country: 1 },{ unique: true });
 ```
 - A compound-unique index which contains the full shard key as a prefix of the index = {score, type, name}
 ```
@@ -373,8 +365,13 @@ Consequently, we can think about:
     ```
     db.jobOffers.createIndex({ expire_date: 1, type: 1, country: 1 });
     ```
-    - Then, we think about having a compound unique index to enforce key constraint on the aggregate key {title, companyName}: given that type and expire_date are in partial overlap between queries we select them as a shard key. Here the unique index:
+    - Then, we think about having a compound unique index to enforce key constraint on the aggregate key {title, companyName}: given that type and expire_date are in partial overlap between queries we select them as a shard key. Here the unique indexes:
     ```
+    db.jobOffers.createIndex(
+      { type: 1, expire_date: 1 },
+      { unique: true }
+    );
+    
     db.jobOffers.createIndex(
       { type: 1, expire_date: 1, title: 1, companyName: 1 },
       { unique: true }
