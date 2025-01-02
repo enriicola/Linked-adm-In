@@ -58,9 +58,8 @@ The only updates might be occasionaly integrating new company records or updated
 
 Consistency and Availability
 
-Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries.
-For core operations (e.g., adding new jobs or companies), ensuring consistency is more critical, as incomplete or incorrect relationships (e.g. a job missing its associated company) could affect query accuracy.
-However, having high availability clearly is the most important goal to reach, particularly for supporting real-time data retrieval and queries.
+Eventual consistency is sufficient for updates to non-critical attributes, such as adding new benefits or updating a company’s market value. These changes are not immediately critical for most queries. However, for other operations like adding new jobs or companies ensuring consistency is more critical, as incomplete or incorrect relationships (e.g. a job missing its associated company) could affect query accuracy.
+Also, having high availability clearly is the most important goal to reach, particularly for supporting fast real-time data retrieval and queries (we want to enable people to find jobs!)
 
 Performance
 
