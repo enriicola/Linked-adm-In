@@ -2,7 +2,7 @@
 ### Foschi Lorenzo, Pezzano Enrico
 Final project for the Advanced Data Management course
 
-### dataset link
+### Dataset link
 https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
 
 
