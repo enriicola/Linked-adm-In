@@ -2,11 +2,11 @@
 ### Foschi Lorenzo, Pezzano Enrico
 Final project for the Advanced Data Management course
 
-### Dataset link
+### **Dataset link**
 https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
 
 
-### Nature of the Proposed Application
+### **Nature of the Proposed Application**
 
 1) Propose a domain you are interested in and a relevant application for it (e.g.,e-commerce domain, shopping cart and session data management application). Take inspirations from datasets available online (e.g., on https://www.kaggle.com).
 2) Provide details about the nature of the proposed application (e.g., the application is read/write intensive, requires batch processing, ...), according to what discussed in the course and corresponding system requirements (e.g., eventual/strong consistency needed, high availability needed).
@@ -34,7 +34,7 @@ The system should be optimized for retrieving and filtering data (also across en
 Searching for jobs based on attributes like type, location, or expiration date.
 Filtering companies by criteria like market value, location, or associated industries.
 
-### Conceptual Schema
+### **Conceptual Schema**
 3. Design a conceptual schema for the identified domain. The schema should include at least three associations.
 
 The following conceptual schema captures key entities and their relationships:
@@ -54,7 +54,7 @@ The following conceptual schema captures key entities and their relationships:
 
 ![Er1](https://github.com/user-attachments/assets/bb3e515b-c972-4ad3-827a-d7471e4cd96a)
 
-### Queries:
+### **Queries:**
 4) Identify a workload, i.e., a set of relevant and frequent operations, related to the chosen application. The workload should contain at least 5 structurally different operations. Describe each workload operation in natural language: 
     
     **Query 1**: Find all jobs that are Full-time and expiring within the next 30 days.
@@ -80,7 +80,7 @@ The following conceptual schema captures key entities and their relationships:
     
 ![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
 
-### Aggregates
+### **Aggregates**
 
 5) Use the aggregate-oriented design methodology (STEP 1-2-3) to design a set of aggregates for the domain and the workload at hand.
 
@@ -113,7 +113,7 @@ Note: dobule n-n relationship kept as list[lists] to semanthically keep the comp
 
 Note: double n-n relationship unpacked into a single list: we're only interested in benefits that skills provides, regardless of the jobs
 
-### Design in MongoDB 
+### **Design in MongoDB**
 6) Design in MongoDB:
  a. Design a schema for MongoDB (including partition keys and indexes), starting from step 5, using the approaches/methodologies proposed in the course.
  b. Specify each operation of the workload in the language supported by MongoDB
@@ -415,7 +415,7 @@ Side note on this Q3: $first is used in MongoDB grouping to select the first enc
 );
 ```
 
-### Design in Cassandra
+### **Design in Cassandra**
 
 7. Design in Cassandra:
  a. Design schema for Cassandra (including partition keys and indexes), starting from step 5, using the approaches/methodologies proposed in the course.
@@ -663,7 +663,7 @@ WHERE type = 'Internship'
   AND requires CONTAINS 'Beginner';
 ```
 
-### Design in Neo4J
+### **Design in Neo4J**
 
 8) Design in Neo4J:
  a. Design a schema for Neo4j, using the approaches/methodologies proposed in the course.
@@ -706,7 +706,7 @@ RETURN j.title
 
 Note: when it comes on choosing whether to put "WHERE" or leveraging "{...}" the decision relies on both flexibility and clarity. For complex conditions we chose WHERE, while for simple conditions of the "starting" node in the path we opted for a direct {...} inside the MATCH parenthesis.
 
-### System S choice:
+### **System S choice**
 
 9) Discuss which, among the three systems, is the most suitable to be used as back-end for your application. Motivate your choice, taking into account the features of your application (step 2) and the identified workload (step 4). Let S be the selected system.
 
@@ -734,7 +734,7 @@ The only weakness is with respect to scalability of writes, but as we said the p
     - Multiple denormalized tables, originated to a schema design that has to be tailored to specific queries (that present multiple disjoint scenarios with respect to selection attributes)
     - No query flexibility for future workload changes, highly probable in this dynamic world of jobs.
 
-### Neo4J: Configuration details
+### **Neo4J: Configuration details**
 10) Provide details about the system configuration needed in system S for storing/processing your data according to the chosen application.
 
 We need:
@@ -774,7 +774,7 @@ For **example**, in our job-board scenario mentioned above, the system must hand
 
 So, in our previous example, as the number of users grows, we can step-by-step increase the number of read replicas depending on the query load; and since read replicas only need to synchronize with the core nodes periodically they can scale horizontally (and also being geographically replicated) without requiring changes to the core cluster configuration!
 
-### Neo4J: Schema details
+### **Neo4J: Schema details**
 11) Create the logical schema in system S
 
 Given Neo4J schema-less nature **we don't have to provide any schema detail** (like in Cassandra for example, where we would have needed some table specifications). Here we just need to dynamically create nodes and their relationships, as we'll do in the next step.
@@ -800,7 +800,7 @@ CREATE (j)-[:OFFERS]->(b);
 CREATE (c)-[:OPERATES_IN]->(i);
 ```
 
-### Neo4J: Graph details
+### **Neo4J: Graph details**
 12) Create an instance of your schema in the selected system, according to the logical schema just created.
 
 We started from the linkedin-job-postings database and we continued by transforming it to meet our needs (removing unused fields and adding market value & economical value for queries enrichment).
@@ -822,7 +822,7 @@ https://raw.githubusercontent.com/enriicola/Linked-adm-In/refs/heads/main/data/r
 
 We noted that, when loading the last CSV file (for the relationships), Neo4J was very slow due to its unfeasability on handling batch processing.
 
-### Neo4J: Workload implementation
+### **Neo4J: Workload implementation**
 13) Implement the workload in system S.
 
 Here follows the workload implementation on Neo4J together with their **execution explanation**. We also decided to show some meaninfgul results with some indexes that could enhance systems' capabilities.
@@ -942,7 +942,7 @@ Again, these indexes are not used due to the benefit.type unique index being alr
 
 ---------------------------------------------------------------------------------
 
-### Model in RDFS / OWL the main classes and properties
+### **Model in RDFS / OWL the main classes and properties**
 14) Model in RDFS / OWL the main classes and the main properties corresponding to the entities and associations in the conceptual schema (step 3)
 
 **a.** (Specify classes and properties) + for each property, specify the corresponding domain and range.
@@ -1179,7 +1179,7 @@ ex:economicalValue a rdf:Property ;
     a owl:FunctionalProperty .
 ```
 
-### Model RDF instances
+### **Model RDF instances**
 15) Model in RDF some instances to populate your schema. In addition:
  a. Relate instances to the corresponding class or property.
  b. Clarify which individuals are identical and which ones are different.
@@ -1246,7 +1246,7 @@ ex:Pitch owl:differentFrom ex:SQL .
 ex:HI owl:differentFrom ex:TaxBenefit .
 ```
 
-### SPARQL queries
+### **SPARQL queries**
 6) Specify in SPARQL at least 3 queries to be executed over the defined RDF dataset. The requests should:
  a. be structurally different (i.e., each of them should contain different constructs)
  b. include at least one CONSTRUCT query
@@ -1334,7 +1334,7 @@ ASK {
 }
 ```
 
-### Let's try 14-16 content in RDF playground!
+### **Let's try 14-16 content in RDF playground!**
 
 17) Check the correctness of the proposed RDF dataset, extended with RDFS /OWL constraints, and of the proposed SPARQL queries using RDF playground (http://rdfplayground.dcc.uchile.cl/) or any other RDF data store at your choice.
 
@@ -1386,5 +1386,5 @@ Below, for reference, there are results of the queries for the above dataset:
 yes
 ```
 
-### Presentation Link :)
+### **Presentation Link :)**
 https://docs.google.com/presentation/d/10JpM2nPsat2lPP40ubgr755MYcMWq2DNsRzwk-B55IA/edit?usp=sharing 
