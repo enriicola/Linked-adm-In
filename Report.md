@@ -49,7 +49,7 @@ The following conceptual schema captures key entities and their relationships:
         Benefit(Type, Economical Value): Represents benefits offered for a job
 
     Relationships:
-        BELONGS_TO: Links a job to an company 
+        LISTS: Links a job to an company 
         REQUIRES: Links a job to the skills it demands
         OFFERS: Links a job to the benefits it provides
         OPERATES_IN: Links a company to the industries it operates in
@@ -60,25 +60,25 @@ The following conceptual schema captures key entities and their relationships:
 4) Identify a workload, i.e., a set of relevant and frequent operations, related to the chosen application. The workload should contain at least 5 structurally different operations. Describe each workload operation in natural language: 
     
     **Query 1**: Find all jobs that are Full-time and expiring within the next 30 days.
-    **Q1**(Job, [Job(type)_!, Job(expire_date)_!], [Job_!])
+    **Q1**(Job, [Job(type)\_!, Job(expire_date)\_!], [Job_!])
     
     **Query 2**: List the name of companies in New York with a market value greater than $1,000,000.
-    **Q2**(Company, [Company(city)_!, Company(mv)_!], [Company(name)_!])
+    **Q2**(Company, [Company(city)\_!, Company(mv)\_!], [Company(name)_!])
     
     **Query 3**: List name and market value of companies operating in Russia and associated with jobs that expire in more than 60 days.
-    **Q3**(Job, [Company(country)_L, Job(expire_date)_!], [Company(name, mv)_L])
+    **Q3**(Job, [Company(country)\_L, Job(expire_date)\_!], [Company(name, mv)\_L])
     
     **Query 4**: List type of jobs associated with companies operating in the Technology domain
     **Q4**(IndustryDomain, [IndustryDomain(Name)_!], [Job(type)_LO])
 
     **Query 5**: List type jobs associated with italian companies operating in the Technology domain
-    **Q5**(Company, [IndustryDomain(Name)_O, Company(country)_!], [Job(type)_L])
+    **Q5**(Company, [IndustryDomain(Name)\_O, Company(country)\_!], [Job(type)_L])
 
     **Query 6**: Retrieve name of skills required for jobs offering benefits of type 401(k) and having a score above 70.
-    **Q6**(Skill, [Skill(score)_!, Benefit(type)_OR], [Skill(name)_!])
+    **Q6**(Skill, [Skill(score)\_!, Benefit(type)\_OR], [Skill(name)_!])
 
     **Query 7**: Find the title of all jobs of type Internship that require skills with a level of "Beginner" and are associated with companies in Hamburg
-    **Q7**(Job, [Job(type)_!, Skill(level)_R, Company(city)_L], [Job(title)_!])
+    **Q7**(Job, [Job(type)\_!, Skill(level)\_R, Company(city)\_L], [Job(title)\_!])
     
 ![ER2](https://github.com/user-attachments/assets/4ee6f063-1eb2-4135-add3-5e7ee2a707f9)
 
@@ -158,6 +158,7 @@ db.adminCommand({
 Note: Remembering that there's no such a thing as "CREATE TABLE" in MongoDB we avoid reporting here insert commands of example data for the collection.
 
 **Queries associated with IndustryDomain: Q4**
+
 Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 
 The aggregate will remain the same...
@@ -228,6 +229,7 @@ db.adminCommand({
 ```
 
 **Queries associated with Company: Q2, Q5**
+
 Selection attributes for Q2: {city, mv}
 
 Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
@@ -312,6 +314,7 @@ Then, after having thought about both queries, we create a mixed unique index fo
 ```
 
 **Queries associated with JobOffer: Q1, Q3, Q7**
+
 Selection attributes for Q1: {type, expire_date}
 
 Selection attributes for Q3: {country, expire_date}
@@ -424,6 +427,7 @@ Side note on this Q3: $first is used in MongoDB grouping to select the first enc
  b. Specify in CQL each operation of the workload.
 
 **Queries associated with Skill: Q6**
+
 Selection attributes for Q6: {score, type} <!-- benefit type -->
 
 **Skill:**
@@ -460,6 +464,7 @@ WHERE score = 71 AND provides CONTAINS '401(k)';
 ```
 
 **Queries associated with IndustryDomain: Q4**
+
 Selection attributes for Q4: {name} <!-- IndustryDomain name -->
 
 **IndustryDomain:**
@@ -494,6 +499,7 @@ WHERE name = 'Technology';
 ```
 
 **Queries associated with Company: Q2, Q5**
+
 Selection attributes for Q2: {city, mv}
 
 Selection attributes for Q5: {country, industryName} <!-- IndustryDomain name -->
@@ -558,6 +564,7 @@ WHERE country = 'Italy' AND industryName = 'Technology';
 ```
 
 **Queries associated with JobOffer: Q1, Q3, Q7**
+
 Selection attributes for Q1: {type, expire_date}
 
 Selection attributes for Q3: {country, expire_date}
