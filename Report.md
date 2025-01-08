@@ -1,10 +1,12 @@
 # Linked-adm-In:
-### Foschi Lorenzo, Pezzano Enrico
+### Foschi Lorenzo (4989646), Pezzano Enrico(4825087)
 Final project for the Advanced Data Management course
 
 ### **Dataset link**
 https://www.kaggle.com/datasets/arshkon/linkedin-job-postings
 
+### **Video link**
+https://youtu.be/-swlqdkIh1E
 
 ### **Nature of the Proposed Application**
 
